@@ -4,29 +4,42 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="c787eb2395984958a4df43dc5c844649" Name="Diagram1" ZoomLevel="86">
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.Linehaul" Width="1.5" PointX="5.25" PointY="20.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.Order" Width="1.5" PointX="5.25" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.OrderItem" Width="1.5" PointX="7.5" PointY="18" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.OrderProblem" Width="1.5" PointX="10.5" PointY="16.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.Package" Width="1.5" PointX="10.5" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.ShippingRate" Width="1.5" PointX="3" PointY="15.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.Staff" Width="1.5" PointX="3" PointY="18.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.Station" Width="1.5" PointX="0.75" PointY="10.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.Status" Width="1.5" PointX="8.25" PointY="10.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.Vehicle" Width="1.5" PointX="3" PointY="23.75" IsExpanded="true" />
+      <Diagram DiagramId="92e383108ecc430686d0df0c0b4163fd" Name="Diagram1">
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Linehaul" Width="1.5" PointX="5.25" PointY="27.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.LINEHAUL_ORDER" Width="1.5" PointX="10.5" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Linehaul_Package" Width="1.5" PointX="13.5" PointY="24.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Order" Width="1.5" PointX="5.25" PointY="18.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Order_Status" Width="1.5" PointX="7.5" PointY="16.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.OrderItem" Width="1.5" PointX="7.5" PointY="26.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.OrderProblem" Width="1.5" PointX="10.5" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Package" Width="1.5" PointX="8.25" PointY="20.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Package_Order" Width="1.5" PointX="10.5" PointY="20.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.ShippingRate" Width="1.5" PointX="3" PointY="23.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Staff" Width="1.5" PointX="3" PointY="27.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Station" Width="1.5" PointX="0.75" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Status" Width="1.5" PointX="5.25" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliveryDatabaseModel.Vehicle" Width="1.5" PointX="3" PointY="32.125" IsExpanded="true" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_LINEHAUL_ORDER_Linehaul" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_Linehaul_Package_Linehaul" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Linehaul_StaffDriving" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Linehaul_StaffOperator" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Linehaul_Vehicle" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_LINEHAUL_ORDER_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_Linehaul_Package_Package" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_StaffCreate" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_StationCurrent" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_StationFirst" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_StationLast" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_StationTransit" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_Status_Order" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_OrderItems_Order" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_OrderProblem_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_Package_Order_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_Status_Station" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_Status_Status" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_OrderProblem_StaffDisposed" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_OrderProblem_StaffReport" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliveryDatabaseModel.FK_Package_Order_Package" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Package_Staff" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Package_StationReceive" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Package_StationSend" ManuallyRouted="false" />
@@ -34,14 +47,7 @@
         <AssociationConnector Association="DeliveryDatabaseModel.FK_ShippingRates_Station" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_ShippingRates_StationSend" ManuallyRouted="false" />
         <AssociationConnector Association="DeliveryDatabaseModel.FK_Staff_Station" ManuallyRouted="false" />
-        <AssociationConnector Association="DeliveryDatabaseModel.Linehaul_Package" ManuallyRouted="false" />
-        <AssociationConnector Association="DeliveryDatabaseModel.Package_Order" ManuallyRouted="false" />
-        <AssociationConnector Association="DeliveryDatabaseModel.LINEHAUL_ORDER" />
-        <EntityTypeShape EntityType="DeliveryDatabaseModel.Order_Status" Width="1.5" PointX="13.5" PointY="12.75" />
-        <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_Status_Order" />
-        <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_Status_Station" />
-        <AssociationConnector Association="DeliveryDatabaseModel.FK_Order_Status_Status" />
-        </Diagram>
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

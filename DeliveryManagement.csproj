@@ -167,6 +167,12 @@
     <Compile Include="Models\Linehaul.cs">
       <DependentUpon>DeliveryMngDBModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LINEHAUL_ORDER.cs">
+      <DependentUpon>DeliveryMngDBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Linehaul_Package.cs">
+      <DependentUpon>DeliveryMngDBModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Order.cs">
       <DependentUpon>DeliveryMngDBModels.tt</DependentUpon>
     </Compile>
@@ -180,6 +186,9 @@
       <DependentUpon>DeliveryMngDBModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Package.cs">
+      <DependentUpon>DeliveryMngDBModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Package_Order.cs">
       <DependentUpon>DeliveryMngDBModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ShippingRate.cs">
@@ -280,13 +289,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\Admin\Views\web.config" />
-    <EntityDeploy Include="Models\DeliveryMngDBModels.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DeliveryMngDBModels.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\DeliveryMngDBModels.edmx.diagram">
-      <DependentUpon>DeliveryMngDBModels.edmx</DependentUpon>
-    </Content>
     <Content Include="Areas\Orders\Views\web.config" />
     <Content Include="Areas\Admin\Common\Dark_Layout\lib\owlcarousel\LICENSE" />
     <Content Include="Areas\Admin\Common\Dark_Layout\lib\waypoints\links.php" />
@@ -330,6 +332,13 @@
     <Content Include="Areas\StationStaffs\Views\Packages\Details.cshtml" />
     <Content Include="Areas\StationStaffs\Views\Packages\Edit.cshtml" />
     <Content Include="Areas\StationStaffs\Views\Packages\Index.cshtml" />
+    <EntityDeploy Include="Models\DeliveryMngDBModels.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DeliveryMngDBModels.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DeliveryMngDBModels.edmx.diagram">
+      <DependentUpon>DeliveryMngDBModels.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

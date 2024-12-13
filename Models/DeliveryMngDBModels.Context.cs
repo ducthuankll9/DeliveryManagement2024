@@ -26,15 +26,18 @@ namespace DeliveryManagement.Models
         }
     
         public virtual DbSet<Linehaul> Linehauls { get; set; }
+        public virtual DbSet<LINEHAUL_ORDER> LINEHAUL_ORDER { get; set; }
+        public virtual DbSet<Linehaul_Package> Linehaul_Package { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Order_Status> Order_Status { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<OrderProblem> OrderProblems { get; set; }
         public virtual DbSet<Package> Packages { get; set; }
+        public virtual DbSet<Package_Order> Package_Order { get; set; }
         public virtual DbSet<ShippingRate> ShippingRates { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<Station> Stations { get; set; }
         public virtual DbSet<Status> Status { get; set; }
         public virtual DbSet<Vehicle> Vehicles { get; set; }
-        public virtual DbSet<Order_Status> Order_Status { get; set; }
     }
 }

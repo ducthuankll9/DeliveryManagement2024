@@ -18,7 +18,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         // GET: StationStaffs/Packages
         public ActionResult Index()
         {
-            var packages = db.Packages.Include(p => p.Orders);
+            var packages = db.Packages.Include(p => p.Status);
             return View(packages.ToList());
         }
 

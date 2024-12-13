@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DeliveryDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DeliveryDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Linehaul">
           <Key>
             <PropertyRef Name="LinehaulID" />
@@ -629,7 +629,8 @@
             <End Role="Staff" EntitySet="Staff" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DeliveryDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -644,11 +645,33 @@
           <Property Name="Seal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Operator" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="Driver" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="LINEHAUL_ORDER" Relationship="Self.FK_LINEHAUL_ORDER_Linehaul" FromRole="Linehaul" ToRole="LINEHAUL_ORDER" />
+          <NavigationProperty Name="Linehaul_Package" Relationship="Self.FK_Linehaul_Package_Linehaul" FromRole="Linehaul" ToRole="Linehaul_Package" />
           <NavigationProperty Name="Staff" Relationship="Self.FK_Linehaul_StaffDriving" FromRole="Linehaul" ToRole="Staff" />
           <NavigationProperty Name="Staff1" Relationship="Self.FK_Linehaul_StaffOperator" FromRole="Linehaul" ToRole="Staff" />
           <NavigationProperty Name="Vehicle" Relationship="Self.FK_Linehaul_Vehicle" FromRole="Linehaul" ToRole="Vehicle" />
-          <NavigationProperty Name="Packages" Relationship="Self.Linehaul_Package" FromRole="Linehaul" ToRole="Package" />
-          <NavigationProperty Name="Orders" Relationship="DeliveryDatabaseModel.LINEHAUL_ORDER" FromRole="Linehaul" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="LINEHAUL_ORDER">
+          <Key>
+            <PropertyRef Name="LinehaulID" />
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="LinehaulID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="OrderID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Linehaul" Relationship="Self.FK_LINEHAUL_ORDER_Linehaul" FromRole="LINEHAUL_ORDER" ToRole="Linehaul" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_LINEHAUL_ORDER_Order" FromRole="LINEHAUL_ORDER" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Linehaul_Package">
+          <Key>
+            <PropertyRef Name="LinehaulID" />
+            <PropertyRef Name="PackageID" />
+          </Key>
+          <Property Name="LinehaulID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="PackageID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Linehaul" Relationship="Self.FK_Linehaul_Package_Linehaul" FromRole="Linehaul_Package" ToRole="Linehaul" />
+          <NavigationProperty Name="Package" Relationship="Self.FK_Linehaul_Package_Package" FromRole="Linehaul_Package" ToRole="Package" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -668,20 +691,35 @@
           <Property Name="Fee" Type="Double" Nullable="false" />
           <Property Name="Paid" Type="Boolean" Nullable="false" />
           <Property Name="TotalWeight" Type="Double" Nullable="false" />
+          <Property Name="OrderPrice" Type="Double" />
           <Property Name="CurrentStationID" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="Creator" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="OnDelivering" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="LINEHAUL_ORDER" Relationship="Self.FK_LINEHAUL_ORDER_Order" FromRole="Order" ToRole="LINEHAUL_ORDER" />
           <NavigationProperty Name="Staff" Relationship="Self.FK_Order_StaffCreate" FromRole="Order" ToRole="Staff" />
           <NavigationProperty Name="Station" Relationship="Self.FK_Order_StationCurrent" FromRole="Order" ToRole="Station" />
           <NavigationProperty Name="Station1" Relationship="Self.FK_Order_StationFirst" FromRole="Order" ToRole="Station" />
           <NavigationProperty Name="Station2" Relationship="Self.FK_Order_StationLast" FromRole="Order" ToRole="Station" />
           <NavigationProperty Name="Station3" Relationship="Self.FK_Order_StationTransit" FromRole="Order" ToRole="Station" />
+          <NavigationProperty Name="Order_Status" Relationship="Self.FK_Order_Status_Order" FromRole="Order" ToRole="Order_Status" />
           <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Order" FromRole="Order" ToRole="OrderItems" />
           <NavigationProperty Name="OrderProblems" Relationship="Self.FK_OrderProblem_Order" FromRole="Order" ToRole="OrderProblem" />
-          <NavigationProperty Name="Packages" Relationship="Self.Package_Order" FromRole="Order" ToRole="Package" />
-          <NavigationProperty Name="Linehauls" Relationship="DeliveryDatabaseModel.LINEHAUL_ORDER" FromRole="Order" ToRole="Linehaul" />
-          <NavigationProperty Name="Order_Status" Relationship="DeliveryDatabaseModel.FK_Order_Status_Order" FromRole="Order" ToRole="Order_Status" />
-          <Property Name="OrderPrice" Type="Double" />
-          <Property Name="OnDelivering" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Package_Order" Relationship="Self.FK_Package_Order_Order" FromRole="Order" ToRole="Package_Order" />
+        </EntityType>
+        <EntityType Name="Order_Status">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="StatusID" />
+            <PropertyRef Name="StationID" />
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="OrderID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="StatusID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="StationID" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_Status_Order" FromRole="Order_Status" ToRole="Order" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_Order_Status_Station" FromRole="Order_Status" ToRole="Station" />
+          <NavigationProperty Name="Status" Relationship="Self.FK_Order_Status_Status" FromRole="Order_Status" ToRole="Status" />
         </EntityType>
         <EntityType Name="OrderItem">
           <Key>
@@ -724,12 +762,23 @@
           <Property Name="Packer" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="SendingStation" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="ReceivingStation" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Linehaul_Package" Relationship="Self.FK_Linehaul_Package_Package" FromRole="Package" ToRole="Linehaul_Package" />
+          <NavigationProperty Name="Package_Order" Relationship="Self.FK_Package_Order_Package" FromRole="Package" ToRole="Package_Order" />
           <NavigationProperty Name="Staff" Relationship="Self.FK_Package_Staff" FromRole="Package" ToRole="Staff" />
           <NavigationProperty Name="Station" Relationship="Self.FK_Package_StationReceive" FromRole="Package" ToRole="Station" />
           <NavigationProperty Name="Station1" Relationship="Self.FK_Package_StationSend" FromRole="Package" ToRole="Station" />
           <NavigationProperty Name="Status" Relationship="Self.FK_Package_Status" FromRole="Package" ToRole="Status" />
-          <NavigationProperty Name="Linehauls" Relationship="Self.Linehaul_Package" FromRole="Package" ToRole="Linehaul" />
-          <NavigationProperty Name="Orders" Relationship="Self.Package_Order" FromRole="Package" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Package_Order">
+          <Key>
+            <PropertyRef Name="PackageID" />
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="PackageID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="OrderID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="AddTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Package_Order_Order" FromRole="Package_Order" ToRole="Order" />
+          <NavigationProperty Name="Package" Relationship="Self.FK_Package_Order_Package" FromRole="Package_Order" ToRole="Package" />
         </EntityType>
         <EntityType Name="ShippingRate">
           <Key>
@@ -777,12 +826,12 @@
           <NavigationProperty Name="Orders1" Relationship="Self.FK_Order_StationFirst" FromRole="Station" ToRole="Order" />
           <NavigationProperty Name="Orders2" Relationship="Self.FK_Order_StationLast" FromRole="Station" ToRole="Order" />
           <NavigationProperty Name="Orders3" Relationship="Self.FK_Order_StationTransit" FromRole="Station" ToRole="Order" />
+          <NavigationProperty Name="Order_Status" Relationship="Self.FK_Order_Status_Station" FromRole="Station" ToRole="Order_Status" />
           <NavigationProperty Name="Packages" Relationship="Self.FK_Package_StationReceive" FromRole="Station" ToRole="Package" />
           <NavigationProperty Name="Packages1" Relationship="Self.FK_Package_StationSend" FromRole="Station" ToRole="Package" />
           <NavigationProperty Name="ShippingRates" Relationship="Self.FK_ShippingRates_Station" FromRole="Station" ToRole="ShippingRates" />
           <NavigationProperty Name="ShippingRates1" Relationship="Self.FK_ShippingRates_StationSend" FromRole="Station" ToRole="ShippingRates" />
           <NavigationProperty Name="Staffs" Relationship="Self.FK_Staff_Station" FromRole="Station" ToRole="Staff" />
-          <NavigationProperty Name="Order_Status" Relationship="DeliveryDatabaseModel.FK_Order_Status_Station" FromRole="Station" ToRole="Order_Status" />
         </EntityType>
         <EntityType Name="Status">
           <Key>
@@ -790,8 +839,8 @@
           </Key>
           <Property Name="StatusID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Order_Status" Relationship="Self.FK_Order_Status_Status" FromRole="Status" ToRole="Order_Status" />
           <NavigationProperty Name="Packages" Relationship="Self.FK_Package_Status" FromRole="Status" ToRole="Package" />
-          <NavigationProperty Name="Order_Status" Relationship="DeliveryDatabaseModel.FK_Order_Status_Status" FromRole="Status" ToRole="Order_Status" />
         </EntityType>
         <EntityType Name="Vehicle">
           <Key>
@@ -801,6 +850,30 @@
           <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Linehauls" Relationship="Self.FK_Linehaul_Vehicle" FromRole="Vehicle" ToRole="Linehaul" />
         </EntityType>
+        <Association Name="FK_LINEHAUL_ORDER_Linehaul">
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="1" />
+          <End Role="LINEHAUL_ORDER" Type="Self.LINEHAUL_ORDER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Linehaul">
+              <PropertyRef Name="LinehaulID" />
+            </Principal>
+            <Dependent Role="LINEHAUL_ORDER">
+              <PropertyRef Name="LinehaulID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_Package_Linehaul">
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="1" />
+          <End Role="Linehaul_Package" Type="Self.Linehaul_Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Linehaul">
+              <PropertyRef Name="LinehaulID" />
+            </Principal>
+            <Dependent Role="Linehaul_Package">
+              <PropertyRef Name="LinehaulID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Linehaul_StaffDriving">
           <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
           <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
@@ -834,6 +907,30 @@
             </Principal>
             <Dependent Role="Linehaul">
               <PropertyRef Name="VehicleNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LINEHAUL_ORDER_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="LINEHAUL_ORDER" Type="Self.LINEHAUL_ORDER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="LINEHAUL_ORDER">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_Package_Package">
+          <End Role="Package" Type="Self.Package" Multiplicity="1" />
+          <End Role="Linehaul_Package" Type="Self.Linehaul_Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Package">
+              <PropertyRef Name="PackageID" />
+            </Principal>
+            <Dependent Role="Linehaul_Package">
+              <PropertyRef Name="PackageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -897,6 +994,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Order_Status_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Order_Status" Type="Self.Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OrderItems_Order">
           <End Role="Order" Type="Self.Order" Multiplicity="1" />
           <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
@@ -921,6 +1030,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Package_Order_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Package_Order" Type="Self.Package_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Package_Order">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status_Station">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Order_Status" Type="Self.Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="StationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Order_Status" Type="Self.Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OrderProblem_StaffDisposed">
           <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
           <End Role="OrderProblem" Type="Self.OrderProblem" Multiplicity="*" />
@@ -942,6 +1087,18 @@
             </Principal>
             <Dependent Role="OrderProblem">
               <PropertyRef Name="ReportStaff" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_Order_Package">
+          <End Role="Package" Type="Self.Package" Multiplicity="1" />
+          <End Role="Package_Order" Type="Self.Package_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Package">
+              <PropertyRef Name="PackageID" />
+            </Principal>
+            <Dependent Role="Package_Order">
+              <PropertyRef Name="PackageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1029,25 +1186,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Linehaul_Package">
-          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
-          <End Role="Package" Type="Self.Package" Multiplicity="*" />
-        </Association>
-        <Association Name="Package_Order">
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
-          <End Role="Package" Type="Self.Package" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="DeliveryDatabaseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Linehauls" EntityType="Self.Linehaul" />
+          <EntitySet Name="LINEHAUL_ORDER" EntityType="Self.LINEHAUL_ORDER" />
+          <EntitySet Name="Linehaul_Package" EntityType="Self.Linehaul_Package" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Order_Status" EntityType="Self.Order_Status" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
           <EntitySet Name="OrderProblems" EntityType="Self.OrderProblem" />
           <EntitySet Name="Packages" EntityType="Self.Package" />
+          <EntitySet Name="Package_Order" EntityType="Self.Package_Order" />
           <EntitySet Name="ShippingRates" EntityType="Self.ShippingRate" />
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="Stations" EntityType="Self.Station" />
           <EntitySet Name="Status" EntityType="Self.Status" />
           <EntitySet Name="Vehicles" EntityType="Self.Vehicle" />
+          <AssociationSet Name="FK_LINEHAUL_ORDER_Linehaul" Association="Self.FK_LINEHAUL_ORDER_Linehaul">
+            <End Role="Linehaul" EntitySet="Linehauls" />
+            <End Role="LINEHAUL_ORDER" EntitySet="LINEHAUL_ORDER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_Package_Linehaul" Association="Self.FK_Linehaul_Package_Linehaul">
+            <End Role="Linehaul" EntitySet="Linehauls" />
+            <End Role="Linehaul_Package" EntitySet="Linehaul_Package" />
+          </AssociationSet>
           <AssociationSet Name="FK_Linehaul_StaffDriving" Association="Self.FK_Linehaul_StaffDriving">
             <End Role="Staff" EntitySet="Staffs" />
             <End Role="Linehaul" EntitySet="Linehauls" />
@@ -1059,6 +1220,14 @@
           <AssociationSet Name="FK_Linehaul_Vehicle" Association="Self.FK_Linehaul_Vehicle">
             <End Role="Vehicle" EntitySet="Vehicles" />
             <End Role="Linehaul" EntitySet="Linehauls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LINEHAUL_ORDER_Order" Association="Self.FK_LINEHAUL_ORDER_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="LINEHAUL_ORDER" EntitySet="LINEHAUL_ORDER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_Package_Package" Association="Self.FK_Linehaul_Package_Package">
+            <End Role="Package" EntitySet="Packages" />
+            <End Role="Linehaul_Package" EntitySet="Linehaul_Package" />
           </AssociationSet>
           <AssociationSet Name="FK_Order_StaffCreate" Association="Self.FK_Order_StaffCreate">
             <End Role="Staff" EntitySet="Staffs" />
@@ -1080,6 +1249,10 @@
             <End Role="Station" EntitySet="Stations" />
             <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
+          <AssociationSet Name="FK_Order_Status_Order" Association="Self.FK_Order_Status_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
           <AssociationSet Name="FK_OrderItems_Order" Association="Self.FK_OrderItems_Order">
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItems" EntitySet="OrderItems" />
@@ -1088,6 +1261,18 @@
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderProblem" EntitySet="OrderProblems" />
           </AssociationSet>
+          <AssociationSet Name="FK_Package_Order_Order" Association="Self.FK_Package_Order_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Package_Order" EntitySet="Package_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status_Station" Association="Self.FK_Order_Status_Station">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status_Status" Association="Self.FK_Order_Status_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
           <AssociationSet Name="FK_OrderProblem_StaffDisposed" Association="Self.FK_OrderProblem_StaffDisposed">
             <End Role="Staff" EntitySet="Staffs" />
             <End Role="OrderProblem" EntitySet="OrderProblems" />
@@ -1095,6 +1280,10 @@
           <AssociationSet Name="FK_OrderProblem_StaffReport" Association="Self.FK_OrderProblem_StaffReport">
             <End Role="Staff" EntitySet="Staffs" />
             <End Role="OrderProblem" EntitySet="OrderProblems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_Order_Package" Association="Self.FK_Package_Order_Package">
+            <End Role="Package" EntitySet="Packages" />
+            <End Role="Package_Order" EntitySet="Package_Order" />
           </AssociationSet>
           <AssociationSet Name="FK_Package_Staff" Association="Self.FK_Package_Staff">
             <End Role="Staff" EntitySet="Staffs" />
@@ -1124,88 +1313,8 @@
             <End Role="Station" EntitySet="Stations" />
             <End Role="Staff" EntitySet="Staffs" />
           </AssociationSet>
-          <AssociationSet Name="Linehaul_Package" Association="Self.Linehaul_Package">
-            <End Role="Linehaul" EntitySet="Linehauls" />
-            <End Role="Package" EntitySet="Packages" />
-          </AssociationSet>
-          <AssociationSet Name="Package_Order" Association="Self.Package_Order">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="Package" EntitySet="Packages" />
-          </AssociationSet>
-          <AssociationSet Name="LINEHAUL_ORDER" Association="DeliveryDatabaseModel.LINEHAUL_ORDER">
-            <End Role="Linehaul" EntitySet="Linehauls" />
-            <End Role="Order" EntitySet="Orders" />
-          </AssociationSet>
-          <EntitySet Name="Order_Status" EntityType="DeliveryDatabaseModel.Order_Status" />
-          <AssociationSet Name="FK_Order_Status_Order" Association="DeliveryDatabaseModel.FK_Order_Status_Order">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="Order_Status" EntitySet="Order_Status" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Order_Status_Station" Association="DeliveryDatabaseModel.FK_Order_Status_Station">
-            <End Role="Station" EntitySet="Stations" />
-            <End Role="Order_Status" EntitySet="Order_Status" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Order_Status_Status" Association="DeliveryDatabaseModel.FK_Order_Status_Status">
-            <End Role="Status" EntitySet="Status" />
-            <End Role="Order_Status" EntitySet="Order_Status" />
-          </AssociationSet>
-          </EntityContainer>
-        <Association Name="LINEHAUL_ORDER">
-          <End Type="DeliveryDatabaseModel.Linehaul" Role="Linehaul" Multiplicity="*" />
-          <End Type="DeliveryDatabaseModel.Order" Role="Order" Multiplicity="*" />
-        </Association>
-        <EntityType Name="Order_Status">
-          <Key>
-            <PropertyRef Name="OrderID" />
-            <PropertyRef Name="StatusID" />
-            <PropertyRef Name="StationID" />
-            <PropertyRef Name="Time" />
-          </Key>
-          <Property Name="OrderID" Type="String" Nullable="false" MaxLength="15" FixedLength="true" Unicode="false" />
-          <Property Name="StatusID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
-          <Property Name="StationID" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
-          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Order" Relationship="DeliveryDatabaseModel.FK_Order_Status_Order" FromRole="Order_Status" ToRole="Order" />
-          <NavigationProperty Name="Station" Relationship="DeliveryDatabaseModel.FK_Order_Status_Station" FromRole="Order_Status" ToRole="Station" />
-          <NavigationProperty Name="Status" Relationship="DeliveryDatabaseModel.FK_Order_Status_Status" FromRole="Order_Status" ToRole="Status" />
-        </EntityType>
-        <Association Name="FK_Order_Status_Order">
-          <End Type="DeliveryDatabaseModel.Order" Role="Order" Multiplicity="1" />
-          <End Type="DeliveryDatabaseModel.Order_Status" Role="Order_Status" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Order">
-              <PropertyRef Name="OrderID" />
-            </Principal>
-            <Dependent Role="Order_Status">
-              <PropertyRef Name="OrderID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Order_Status_Station">
-          <End Type="DeliveryDatabaseModel.Station" Role="Station" Multiplicity="1" />
-          <End Type="DeliveryDatabaseModel.Order_Status" Role="Order_Status" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Station">
-              <PropertyRef Name="StationID" />
-            </Principal>
-            <Dependent Role="Order_Status">
-              <PropertyRef Name="StationID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Order_Status_Status">
-          <End Type="DeliveryDatabaseModel.Status" Role="Status" Multiplicity="1" />
-          <End Type="DeliveryDatabaseModel.Order_Status" Role="Order_Status" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Status">
-              <PropertyRef Name="StatusID" />
-            </Principal>
-            <Dependent Role="Order_Status">
-              <PropertyRef Name="StatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        </Schema>
+        </EntityContainer>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1224,11 +1333,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LINEHAUL_ORDER">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.LINEHAUL_ORDER">
+              <MappingFragment StoreEntitySet="LINEHAUL_ORDER">
+                <ScalarProperty Name="LinehaulID" ColumnName="LinehaulID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Linehaul_Package">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Linehaul_Package">
+              <MappingFragment StoreEntitySet="Linehaul_Package">
+                <ScalarProperty Name="LinehaulID" ColumnName="LinehaulID" />
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="DeliveryDatabaseModel.Order">
               <MappingFragment StoreEntitySet="Order">
-                <ScalarProperty Name="OnDelivering" ColumnName="OnDelivering" />
-                <ScalarProperty Name="OrderPrice" ColumnName="OrderPrice" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="SenderName" ColumnName="SenderName" />
                 <ScalarProperty Name="SenderAddress" ColumnName="SenderAddress" />
@@ -1243,8 +1368,20 @@
                 <ScalarProperty Name="Fee" ColumnName="Fee" />
                 <ScalarProperty Name="Paid" ColumnName="Paid" />
                 <ScalarProperty Name="TotalWeight" ColumnName="TotalWeight" />
+                <ScalarProperty Name="OrderPrice" ColumnName="OrderPrice" />
                 <ScalarProperty Name="CurrentStationID" ColumnName="CurrentStationID" />
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="OnDelivering" ColumnName="OnDelivering" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_Status">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Order_Status">
+              <MappingFragment StoreEntitySet="Order_Status">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1284,6 +1421,15 @@
                 <ScalarProperty Name="Packer" ColumnName="Packer" />
                 <ScalarProperty Name="SendingStation" ColumnName="SendingStation" />
                 <ScalarProperty Name="ReceivingStation" ColumnName="ReceivingStation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Package_Order">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Package_Order">
+              <MappingFragment StoreEntitySet="Package_Order">
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="AddTime" ColumnName="AddTime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1336,40 +1482,6 @@
               <MappingFragment StoreEntitySet="Vehicle">
                 <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="Linehaul_Package" TypeName="DeliveryDatabaseModel.Linehaul_Package" StoreEntitySet="Linehaul_Package">
-            <EndProperty Name="Linehaul">
-              <ScalarProperty Name="LinehaulID" ColumnName="LinehaulID" />
-            </EndProperty>
-            <EndProperty Name="Package">
-              <ScalarProperty Name="PackageID" ColumnName="PackageID" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="Package_Order" TypeName="DeliveryDatabaseModel.Package_Order" StoreEntitySet="Package_Order">
-            <EndProperty Name="Order">
-              <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-            </EndProperty>
-            <EndProperty Name="Package">
-              <ScalarProperty Name="PackageID" ColumnName="PackageID" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="LINEHAUL_ORDER" TypeName="DeliveryDatabaseModel.LINEHAUL_ORDER" StoreEntitySet="LINEHAUL_ORDER">
-            <EndProperty Name="Order">
-              <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-            </EndProperty>
-            <EndProperty Name="Linehaul">
-              <ScalarProperty Name="LinehaulID" ColumnName="LinehaulID" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <EntitySetMapping Name="Order_Status">
-            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Order_Status">
-              <MappingFragment StoreEntitySet="Order_Status">
-                <ScalarProperty Name="Time" ColumnName="Time" />
-                <ScalarProperty Name="StationID" ColumnName="StationID" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
