@@ -1,0 +1,56 @@
+﻿@model DeliveryManagement.Models.Staff
+
+@{
+    ViewBag.Title = "Xóa NV";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+}
+
+<!-- ViewBag.Error -->
+@if (ViewBag.Error != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>Chú ý:</h2>
+
+<h3>Bạn chắc chắn muốn xóa nhân viên này?</h3>
+<hr />
+<div class="row g-4">
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.StaffID)</dt>
+        <dd>@Html.DisplayFor(model => model.StaffID)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Fullname)</dt>
+        <dd>@Html.DisplayFor(model => model.Fullname)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Male)</dt>
+        <dd>
+            @if (Model.Male)
+            {<div>Nam</div> }
+            else
+            { <div>Nữ</div>}
+        </dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Birthday)</dt>
+        <dd>@Html.DisplayFor(model => model.Birthday)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.StationID)</dt>
+        <dd>@Html.DisplayFor(model => model.Station.StationName)</dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="XÓA TÀI KHOẢN" class="btn btn-danger" />
+            <button type="button" class="btn btn-outline-info">
+                @Html.ActionLink("Hủy bỏ", "Index")
+            </button>
+        </div>
+    }
+</div>

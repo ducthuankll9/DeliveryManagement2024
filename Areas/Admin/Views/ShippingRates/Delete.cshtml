@@ -1,0 +1,73 @@
+﻿@model DeliveryManagement.Models.ShippingRate
+
+@{
+    ViewBag.Title = "Xóa tuyến";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+}
+
+<h2>Hãy xem lại</h2>
+
+<h4>Hệ thống sẽ không thể tính toán giá cước cho tuyến này nếu bị xóa đi<br />Bạn chắc chắn muốn xóa tuyến này?</h4>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SendingStation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station1.StationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReceivingStation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station.StationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PricePerKg)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PricePerKg)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinPriceForHVO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinPriceForHVO)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PricePerKgForHVO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PricePerKgForHVO)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="CÓ, HÃY XÓA" class="btn btn-danger" />
+            <button type="button" class="btn btn-outline-info">
+                @Html.ActionLink("Quay lại", "Index")
+            </button>
+        </div>
+    }
+</div>

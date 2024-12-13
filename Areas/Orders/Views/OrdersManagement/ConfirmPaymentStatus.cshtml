@@ -1,0 +1,83 @@
+﻿@model DeliveryManagement.Models.Order
+
+@{
+    ViewBag.Title = "Xác nhận thanh toán";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+@if (ViewBag.Error != null || TempData["Error"] != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h5>Xác nhận thanh toán cho đơn hàng @Model.OrderID</h5>
+
+@using (Html.BeginForm("ConfirmPaymentStatus", "OrdersManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.OrderID)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Fee, htmlAttributes: new { @class = "control-label col-md-2" }) 
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-10">
+                    @if (Model.Fee > 0)
+                    {
+                        @Html.EditorFor(model => model.Fee, new { htmlAttributes = new { @class = "form-control", @readonly = "@readonly" } })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(model => model.Fee, new { htmlAttributes = new { @class = "form-control col-md-1" } })
+                    }
+                </div>
+                <button type="button" class="btn btn-outline-info col-md-1" onclick="editableFee()">Sửa đổi</button>
+            </div>
+            
+            @Html.ValidationMessageFor(model => model.Fee, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Paid, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="form-control borderW">
+                @Html.RadioButtonFor(model => model.Paid, "true", new { @id = "senderPaidRadioBtn" })
+                <label for="senderPaidRadioBtn">Người gửi đã thanh toán</label>
+                @Html.RadioButtonFor(model => model.Paid, "false", new { @id = "receiverPaidRadioBtn", @style = "margin-left:10%;" })
+                <label for="receiverPaidRadioBtn">Người nhận thanh toán</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <div style="position: fixed; bottom: 10%; right:2%; z-index:1000;">
+                <input type="submit" value="Hoàn thành &#10003;	" class="btn btn-outline-success inlineBl" />
+                @if (!Model.OnDelivering)
+                {
+                    <button type="button" class="btn btn-outline-danger inlineBl">
+                        @Html.ActionLink("Hủy và xóa đơn", "CancelRegister", new { id = Model.OrderID.Trim() }) &#10008;
+                    </button>
+                }
+                <button type="button" class="btn btn-outline-info inlineBl">
+                    @Html.ActionLink("Quay lại", "Items", new { id = Model.OrderID.Trim() }) &#10554;
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,79 @@
+﻿@model DeliveryManagement.Models.ShippingRate
+
+@{
+    ViewBag.Title = "Cập nhật cước";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+}
+
+<!-- ViewBag.Error -->
+@if (ViewBag.Error != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>Cập nhật cước cho tuyến đường</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h5>@Model.Station1.StationName >> @Model.Station.StationName</h5>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.SendingStation)
+
+        @Html.HiddenFor(model => model.ReceivingStation)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MinPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MinPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MinPrice, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PricePerKg, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PricePerKg, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PricePerKg, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MinPriceForHVO, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MinPriceForHVO, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MinPriceForHVO, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PricePerKgForHVO, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PricePerKgForHVO, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PricePerKgForHVO, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <br />
+                <input type="submit" value="Lưu lại" class="btn btn-outline-success" />
+                <button type="button" class="btn btn-outline-info">
+                    @Html.ActionLink("Quay lại", "Index")
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

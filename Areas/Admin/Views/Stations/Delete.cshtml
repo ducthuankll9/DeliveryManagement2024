@@ -1,0 +1,51 @@
+﻿@model DeliveryManagement.Models.Station
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+
+    string strFunction = "";
+    if (Model.IsAdmin) { strFunction += "Quản trị viên"; }
+    if (Model.IsStation) { strFunction += (strFunction == "" ? "" : " - ") + "Trạm giao nhận"; }
+    if (Model.IsDriver) { strFunction += (strFunction == "" ? "" : " - ") + "Chức năng tài xế"; }
+}
+
+<!-- ViewBag.Error -->
+@if (ViewBag.Error != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>Hãy xem lại</h2>
+
+<h3>Bạn chắc chắn muốn xóa trạm/đơn vị này?</h3>
+<div>
+    <h4>Trạm @Model.StationID</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.StationName)</dt>
+        <dd>@Html.DisplayFor(model => model.StationName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Address)</dt>
+        <dd>@Html.DisplayFor(model => model.Address)</dd>
+
+        <dt>Chức năng có thể sử dụng trên hệ thống:</dt>
+        <dd>@strFunction</dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="XÓA" class="btn btn-danger" />
+            <button type="button" class="btn btn-outline-info">
+                @Html.ActionLink("Quay lại", "Index")
+            </button>
+        </div>
+    }
+</div>

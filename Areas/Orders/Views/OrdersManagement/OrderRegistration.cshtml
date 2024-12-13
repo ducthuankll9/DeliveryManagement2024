@@ -1,0 +1,189 @@
+﻿@model DeliveryManagement.Models.Order
+
+@{
+    ViewBag.Title = "Tthông tin vận chuyển";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+
+    //var currentStep = ViewContext.RouteData.Values["step"];
+}
+
+<!-- ViewBag.Error -->
+@if (ViewBag.Error != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (Model.OnDelivering)
+{
+    <h2>Cập nhật thông tin vận chuyển</h2>
+}
+else
+{
+    <h2>Tạo đơn hàng mới</h2>
+}
+
+
+
+@using (Html.BeginForm("OrderRegistration", "OrdersManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderID, htmlAttributes: new { @class = "control-label col-md-2", @style = "font-weight: bold;" })
+        <div class="col-md-12">
+            @if (Model.OrderID.Length == 15)
+            {
+                @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            }
+            else
+            {
+                @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control" } })
+            }
+
+            @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <h5>Thông tin giao nhận</h5>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.SenderName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.SenderName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SenderName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SenderAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.SenderAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SenderAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SenderPhone, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.SenderPhone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SenderPhone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SenderEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.SenderEmail, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SenderEmail, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ReceiverName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.ReceiverName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ReceiverName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ReceiverAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.ReceiverAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ReceiverAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ReceiverPhone, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-12">
+                    @Html.EditorFor(model => model.ReceiverPhone, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ReceiverPhone, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <h5>Hành trình</h5>
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.FirstStation, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-12">
+                    @Html.DropDownList("FirstStation", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.FirstStation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Transit, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-12">
+                    @Html.DropDownList("Transit", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Transit, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.LastStation, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-12">
+                    @Html.DropDownList("LastStation", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LastStation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @Html.ValidationMessageFor(model => model.Creator, "", new { @class = "text-danger" })
+    @Html.ValidationMessageFor(model => model.CurrentStationID, "", new { @class = "text-danger" })
+
+
+    @Html.HiddenFor(model => model.Fee)
+    @Html.HiddenFor(model => model.Paid)
+    @Html.HiddenFor(model => model.OrderPrice)
+    @Html.HiddenFor(model => model.TotalWeight)
+    @Html.HiddenFor(model => model.Creator)
+    @Html.HiddenFor(model => model.CurrentStationID)
+    @Html.HiddenFor(model => model.OnDelivering)
+
+    @if (ViewBag.BadError == null)
+    {
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <br />
+                <div style="position: fixed; bottom: 10%; right:2%; z-index:1000;">
+                    <input type="submit" value="Tiếp theo &#10148;" class="btn btn-outline-success inlineBl" />
+                    @if (!Model.OnDelivering)
+                    {
+                        <button type="button" class="btn btn-outline-danger inlineBl">
+                            @Html.ActionLink("Hủy và xóa đơn", "CancelRegister", new { id = Model.OrderID.Trim() }) &#10008;
+                        </button>
+                    }                    
+                    <button type="button" class="btn btn-outline-info inlineBl">
+                        @Html.ActionLink("Quay lại", "Index", new { id = Model.OrderID.Trim() }) &#10554;
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

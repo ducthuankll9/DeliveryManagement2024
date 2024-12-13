@@ -1,0 +1,1399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DeliveryDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Linehaul">
+          <Key>
+            <PropertyRef Name="LinehaulID" />
+          </Key>
+          <Property Name="LinehaulID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="VehicleNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="NumberOfPackage" Type="int" Nullable="false" />
+          <Property Name="NumberOfOrder" Type="int" Nullable="false" />
+          <Property Name="Seal" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Operator" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="Driver" Type="char" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LINEHAUL_ORDER">
+          <Key>
+            <PropertyRef Name="LinehaulID" />
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="LinehaulID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="OrderID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Linehaul_Package">
+          <Key>
+            <PropertyRef Name="LinehaulID" />
+            <PropertyRef Name="PackageID" />
+          </Key>
+          <Property Name="LinehaulID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="PackageID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="SenderName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SenderAddress" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="SenderPhone" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="SenderEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceiverName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReceiverAddress" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ReceiverPhone" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="FirstStation" Type="char" MaxLength="4" />
+          <Property Name="Transit" Type="char" MaxLength="4" />
+          <Property Name="LastStation" Type="char" MaxLength="4" />
+          <Property Name="Fee" Type="float" Nullable="false" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
+          <Property Name="TotalWeight" Type="float" Nullable="false" />
+          <Property Name="OrderPrice" Type="float" />
+          <Property Name="CurrentStationID" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="Creator" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="OnDelivering" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order_Status">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="StatusID" />
+            <PropertyRef Name="StationID" />
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="OrderID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="StatusID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="StationID" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderItems">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="OrderID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="ItemID" Type="int" Nullable="false" />
+          <Property Name="ItemName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Weight" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderProblem">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="UpdateTime" />
+          </Key>
+          <Property Name="OrderID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="UpdateTime" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="IsDisposed" Type="bit" Nullable="false" />
+          <Property Name="Continuable" Type="bit" Nullable="false" />
+          <Property Name="ReportStaff" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="DisposedStaff" Type="char" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Package">
+          <Key>
+            <PropertyRef Name="PackageID" />
+          </Key>
+          <Property Name="PackageID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="CompleteTime" Type="datetime" />
+          <Property Name="NumberOfOrder" Type="int" Nullable="false" />
+          <Property Name="StatusID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TotalWeight" Type="float" Nullable="false" />
+          <Property Name="Packer" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="SendingStation" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ReceivingStation" Type="char" MaxLength="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Package_Order">
+          <Key>
+            <PropertyRef Name="PackageID" />
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="PackageID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="OrderID" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="AddTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShippingRates">
+          <Key>
+            <PropertyRef Name="SendingStation" />
+            <PropertyRef Name="ReceivingStation" />
+          </Key>
+          <Property Name="SendingStation" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="ReceivingStation" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="MinPrice" Type="float" Nullable="false" />
+          <Property Name="PricePerKg" Type="float" Nullable="false" />
+          <Property Name="MinPriceForHVO" Type="float" />
+          <Property Name="PricePerKgForHVO" Type="float" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffID" />
+          </Key>
+          <Property Name="StaffID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Fullname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Male" Type="bit" Nullable="false" />
+          <Property Name="Birthday" Type="date" Nullable="false" />
+          <Property Name="StationID" Type="char" MaxLength="4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="StationID" />
+          </Key>
+          <Property Name="StationID" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="StationName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="IsStation" Type="bit" Nullable="false" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
+          <Property Name="IsDriver" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="StatusID" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="VehicleNumber" />
+          </Key>
+          <Property Name="VehicleNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_LINEHAUL_ORDER_Linehaul">
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="1" />
+          <End Role="LINEHAUL_ORDER" Type="Self.LINEHAUL_ORDER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Linehaul">
+              <PropertyRef Name="LinehaulID" />
+            </Principal>
+            <Dependent Role="LINEHAUL_ORDER">
+              <PropertyRef Name="LinehaulID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LINEHAUL_ORDER_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="LINEHAUL_ORDER" Type="Self.LINEHAUL_ORDER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="LINEHAUL_ORDER">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_Package_Linehaul">
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="1" />
+          <End Role="Linehaul_Package" Type="Self.Linehaul_Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Linehaul">
+              <PropertyRef Name="LinehaulID" />
+            </Principal>
+            <Dependent Role="Linehaul_Package">
+              <PropertyRef Name="LinehaulID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_Package_Package">
+          <End Role="Package" Type="Self.Package" Multiplicity="1" />
+          <End Role="Linehaul_Package" Type="Self.Linehaul_Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Package">
+              <PropertyRef Name="PackageID" />
+            </Principal>
+            <Dependent Role="Linehaul_Package">
+              <PropertyRef Name="PackageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_StaffDriving">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="Linehaul">
+              <PropertyRef Name="Driver" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_StaffOperator">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="Linehaul">
+              <PropertyRef Name="Operator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_Vehicle">
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="1" />
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehicle">
+              <PropertyRef Name="VehicleNumber" />
+            </Principal>
+            <Dependent Role="Linehaul">
+              <PropertyRef Name="VehicleNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StaffCreate">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Creator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StationCurrent">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CurrentStationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StationFirst">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="FirstStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StationLast">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="LastStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StationTransit">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Transit" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Order_Status" Type="Self.Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status_Station">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Order_Status" Type="Self.Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="StationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Order_Status" Type="Self.Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProblem_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderProblem" Type="Self.OrderProblem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderProblem">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProblem_StaffDisposed">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="OrderProblem" Type="Self.OrderProblem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="OrderProblem">
+              <PropertyRef Name="DisposedStaff" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProblem_StaffReport">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="OrderProblem" Type="Self.OrderProblem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="OrderProblem">
+              <PropertyRef Name="ReportStaff" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_Order_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Package_Order" Type="Self.Package_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Package_Order">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_Order_Package">
+          <End Role="Package" Type="Self.Package" Multiplicity="1" />
+          <End Role="Package_Order" Type="Self.Package_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Package">
+              <PropertyRef Name="PackageID" />
+            </Principal>
+            <Dependent Role="Package_Order">
+              <PropertyRef Name="PackageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_Staff">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="Packer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_StationReceive">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="ReceivingStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_StationSend">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="SendingStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShippingRates_Station">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="ShippingRates" Type="Self.ShippingRates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="ShippingRates">
+              <PropertyRef Name="ReceivingStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShippingRates_StationSend">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="ShippingRates" Type="Self.ShippingRates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="ShippingRates">
+              <PropertyRef Name="SendingStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Staff_Station">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="StationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DeliveryDatabaseModelStoreContainer">
+          <EntitySet Name="Linehaul" EntityType="Self.Linehaul" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LINEHAUL_ORDER" EntityType="Self.LINEHAUL_ORDER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Linehaul_Package" EntityType="Self.Linehaul_Package" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_Status" EntityType="Self.Order_Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderProblem" EntityType="Self.OrderProblem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Package" EntityType="Self.Package" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Package_Order" EntityType="Self.Package_Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShippingRates" EntityType="Self.ShippingRates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Station" EntityType="Self.Station" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehicle" EntityType="Self.Vehicle" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_LINEHAUL_ORDER_Linehaul" Association="Self.FK_LINEHAUL_ORDER_Linehaul">
+            <End Role="Linehaul" EntitySet="Linehaul" />
+            <End Role="LINEHAUL_ORDER" EntitySet="LINEHAUL_ORDER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LINEHAUL_ORDER_Order" Association="Self.FK_LINEHAUL_ORDER_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="LINEHAUL_ORDER" EntitySet="LINEHAUL_ORDER" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_Package_Linehaul" Association="Self.FK_Linehaul_Package_Linehaul">
+            <End Role="Linehaul" EntitySet="Linehaul" />
+            <End Role="Linehaul_Package" EntitySet="Linehaul_Package" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_Package_Package" Association="Self.FK_Linehaul_Package_Package">
+            <End Role="Package" EntitySet="Package" />
+            <End Role="Linehaul_Package" EntitySet="Linehaul_Package" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_StaffDriving" Association="Self.FK_Linehaul_StaffDriving">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="Linehaul" EntitySet="Linehaul" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_StaffOperator" Association="Self.FK_Linehaul_StaffOperator">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="Linehaul" EntitySet="Linehaul" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_Vehicle" Association="Self.FK_Linehaul_Vehicle">
+            <End Role="Vehicle" EntitySet="Vehicle" />
+            <End Role="Linehaul" EntitySet="Linehaul" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StaffCreate" Association="Self.FK_Order_StaffCreate">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StationCurrent" Association="Self.FK_Order_StationCurrent">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StationFirst" Association="Self.FK_Order_StationFirst">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StationLast" Association="Self.FK_Order_StationLast">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StationTransit" Association="Self.FK_Order_StationTransit">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status_Order" Association="Self.FK_Order_Status_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status_Station" Association="Self.FK_Order_Status_Station">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status_Status" Association="Self.FK_Order_Status_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Order" Association="Self.FK_OrderItems_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProblem_Order" Association="Self.FK_OrderProblem_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderProblem" EntitySet="OrderProblem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProblem_StaffDisposed" Association="Self.FK_OrderProblem_StaffDisposed">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="OrderProblem" EntitySet="OrderProblem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProblem_StaffReport" Association="Self.FK_OrderProblem_StaffReport">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="OrderProblem" EntitySet="OrderProblem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_Order_Order" Association="Self.FK_Package_Order_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Package_Order" EntitySet="Package_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_Order_Package" Association="Self.FK_Package_Order_Package">
+            <End Role="Package" EntitySet="Package" />
+            <End Role="Package_Order" EntitySet="Package_Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_Staff" Association="Self.FK_Package_Staff">
+            <End Role="Staff" EntitySet="Staff" />
+            <End Role="Package" EntitySet="Package" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_StationReceive" Association="Self.FK_Package_StationReceive">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Package" EntitySet="Package" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_StationSend" Association="Self.FK_Package_StationSend">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Package" EntitySet="Package" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_Status" Association="Self.FK_Package_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Package" EntitySet="Package" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShippingRates_Station" Association="Self.FK_ShippingRates_Station">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="ShippingRates" EntitySet="ShippingRates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShippingRates_StationSend" Association="Self.FK_ShippingRates_StationSend">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="ShippingRates" EntitySet="ShippingRates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Staff_Station" Association="Self.FK_Staff_Station">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Staff" EntitySet="Staff" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DeliveryDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Linehaul">
+          <Key>
+            <PropertyRef Name="LinehaulID" />
+          </Key>
+          <Property Name="LinehaulID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="VehicleNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NumberOfPackage" Type="Int32" Nullable="false" />
+          <Property Name="NumberOfOrder" Type="Int32" Nullable="false" />
+          <Property Name="Seal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Operator" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Driver" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Staff" Relationship="Self.FK_Linehaul_StaffDriving" FromRole="Linehaul" ToRole="Staff" />
+          <NavigationProperty Name="Staff1" Relationship="Self.FK_Linehaul_StaffOperator" FromRole="Linehaul" ToRole="Staff" />
+          <NavigationProperty Name="Vehicle" Relationship="Self.FK_Linehaul_Vehicle" FromRole="Linehaul" ToRole="Vehicle" />
+          <NavigationProperty Name="Packages" Relationship="Self.Linehaul_Package" FromRole="Linehaul" ToRole="Package" />
+          <NavigationProperty Name="Orders" Relationship="DeliveryDatabaseModel.LINEHAUL_ORDER" FromRole="Linehaul" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="SenderName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SenderAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SenderPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SenderEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiverName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReceiverAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReceiverPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstStation" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="Transit" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="LastStation" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="Fee" Type="Double" Nullable="false" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="TotalWeight" Type="Double" Nullable="false" />
+          <Property Name="CurrentStationID" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Creator" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Staff" Relationship="Self.FK_Order_StaffCreate" FromRole="Order" ToRole="Staff" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_Order_StationCurrent" FromRole="Order" ToRole="Station" />
+          <NavigationProperty Name="Station1" Relationship="Self.FK_Order_StationFirst" FromRole="Order" ToRole="Station" />
+          <NavigationProperty Name="Station2" Relationship="Self.FK_Order_StationLast" FromRole="Order" ToRole="Station" />
+          <NavigationProperty Name="Station3" Relationship="Self.FK_Order_StationTransit" FromRole="Order" ToRole="Station" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Order" FromRole="Order" ToRole="OrderItems" />
+          <NavigationProperty Name="OrderProblems" Relationship="Self.FK_OrderProblem_Order" FromRole="Order" ToRole="OrderProblem" />
+          <NavigationProperty Name="Packages" Relationship="Self.Package_Order" FromRole="Order" ToRole="Package" />
+          <NavigationProperty Name="Linehauls" Relationship="DeliveryDatabaseModel.LINEHAUL_ORDER" FromRole="Order" ToRole="Linehaul" />
+          <NavigationProperty Name="Order_Status" Relationship="DeliveryDatabaseModel.FK_Order_Status_Order" FromRole="Order" ToRole="Order_Status" />
+          <Property Name="OrderPrice" Type="Double" />
+          <Property Name="OnDelivering" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="ItemID" />
+          </Key>
+          <Property Name="OrderID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ItemID" Type="Int32" Nullable="false" />
+          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Weight" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderItems_Order" FromRole="OrderItems" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="OrderProblem">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="UpdateTime" />
+          </Key>
+          <Property Name="OrderID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsDisposed" Type="Boolean" Nullable="false" />
+          <Property Name="Continuable" Type="Boolean" Nullable="false" />
+          <Property Name="ReportStaff" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="DisposedStaff" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderProblem_Order" FromRole="OrderProblem" ToRole="Order" />
+          <NavigationProperty Name="Staff" Relationship="Self.FK_OrderProblem_StaffDisposed" FromRole="OrderProblem" ToRole="Staff" />
+          <NavigationProperty Name="Staff1" Relationship="Self.FK_OrderProblem_StaffReport" FromRole="OrderProblem" ToRole="Staff" />
+        </EntityType>
+        <EntityType Name="Package">
+          <Key>
+            <PropertyRef Name="PackageID" />
+          </Key>
+          <Property Name="PackageID" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CompleteTime" Type="DateTime" Precision="3" />
+          <Property Name="NumberOfOrder" Type="Int32" Nullable="false" />
+          <Property Name="StatusID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TotalWeight" Type="Double" Nullable="false" />
+          <Property Name="Packer" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="SendingStation" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ReceivingStation" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Staff" Relationship="Self.FK_Package_Staff" FromRole="Package" ToRole="Staff" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_Package_StationReceive" FromRole="Package" ToRole="Station" />
+          <NavigationProperty Name="Station1" Relationship="Self.FK_Package_StationSend" FromRole="Package" ToRole="Station" />
+          <NavigationProperty Name="Status" Relationship="Self.FK_Package_Status" FromRole="Package" ToRole="Status" />
+          <NavigationProperty Name="Linehauls" Relationship="Self.Linehaul_Package" FromRole="Package" ToRole="Linehaul" />
+          <NavigationProperty Name="Orders" Relationship="Self.Package_Order" FromRole="Package" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="ShippingRate">
+          <Key>
+            <PropertyRef Name="SendingStation" />
+            <PropertyRef Name="ReceivingStation" />
+          </Key>
+          <Property Name="SendingStation" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="ReceivingStation" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="MinPrice" Type="Double" Nullable="false" />
+          <Property Name="PricePerKg" Type="Double" Nullable="false" />
+          <Property Name="MinPriceForHVO" Type="Double" />
+          <Property Name="PricePerKgForHVO" Type="Double" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_ShippingRates_Station" FromRole="ShippingRates" ToRole="Station" />
+          <NavigationProperty Name="Station1" Relationship="Self.FK_ShippingRates_StationSend" FromRole="ShippingRates" ToRole="Station" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffID" />
+          </Key>
+          <Property Name="StaffID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Fullname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Male" Type="Boolean" Nullable="false" />
+          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StationID" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Linehauls" Relationship="Self.FK_Linehaul_StaffDriving" FromRole="Staff" ToRole="Linehaul" />
+          <NavigationProperty Name="Linehauls1" Relationship="Self.FK_Linehaul_StaffOperator" FromRole="Staff" ToRole="Linehaul" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Order_StaffCreate" FromRole="Staff" ToRole="Order" />
+          <NavigationProperty Name="OrderProblems" Relationship="Self.FK_OrderProblem_StaffDisposed" FromRole="Staff" ToRole="OrderProblem" />
+          <NavigationProperty Name="OrderProblems1" Relationship="Self.FK_OrderProblem_StaffReport" FromRole="Staff" ToRole="OrderProblem" />
+          <NavigationProperty Name="Packages" Relationship="Self.FK_Package_Staff" FromRole="Staff" ToRole="Package" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_Staff_Station" FromRole="Staff" ToRole="Station" />
+        </EntityType>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="StationID" />
+          </Key>
+          <Property Name="StationID" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="StationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IsStation" Type="Boolean" Nullable="false" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="IsDriver" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Order_StationCurrent" FromRole="Station" ToRole="Order" />
+          <NavigationProperty Name="Orders1" Relationship="Self.FK_Order_StationFirst" FromRole="Station" ToRole="Order" />
+          <NavigationProperty Name="Orders2" Relationship="Self.FK_Order_StationLast" FromRole="Station" ToRole="Order" />
+          <NavigationProperty Name="Orders3" Relationship="Self.FK_Order_StationTransit" FromRole="Station" ToRole="Order" />
+          <NavigationProperty Name="Packages" Relationship="Self.FK_Package_StationReceive" FromRole="Station" ToRole="Package" />
+          <NavigationProperty Name="Packages1" Relationship="Self.FK_Package_StationSend" FromRole="Station" ToRole="Package" />
+          <NavigationProperty Name="ShippingRates" Relationship="Self.FK_ShippingRates_Station" FromRole="Station" ToRole="ShippingRates" />
+          <NavigationProperty Name="ShippingRates1" Relationship="Self.FK_ShippingRates_StationSend" FromRole="Station" ToRole="ShippingRates" />
+          <NavigationProperty Name="Staffs" Relationship="Self.FK_Staff_Station" FromRole="Station" ToRole="Staff" />
+          <NavigationProperty Name="Order_Status" Relationship="DeliveryDatabaseModel.FK_Order_Status_Station" FromRole="Station" ToRole="Order_Status" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="StatusID" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Packages" Relationship="Self.FK_Package_Status" FromRole="Status" ToRole="Package" />
+          <NavigationProperty Name="Order_Status" Relationship="DeliveryDatabaseModel.FK_Order_Status_Status" FromRole="Status" ToRole="Order_Status" />
+        </EntityType>
+        <EntityType Name="Vehicle">
+          <Key>
+            <PropertyRef Name="VehicleNumber" />
+          </Key>
+          <Property Name="VehicleNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Linehauls" Relationship="Self.FK_Linehaul_Vehicle" FromRole="Vehicle" ToRole="Linehaul" />
+        </EntityType>
+        <Association Name="FK_Linehaul_StaffDriving">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="Linehaul">
+              <PropertyRef Name="Driver" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_StaffOperator">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="Linehaul">
+              <PropertyRef Name="Operator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linehaul_Vehicle">
+          <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="1" />
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehicle">
+              <PropertyRef Name="VehicleNumber" />
+            </Principal>
+            <Dependent Role="Linehaul">
+              <PropertyRef Name="VehicleNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StaffCreate">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Creator" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StationCurrent">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CurrentStationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StationFirst">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="FirstStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StationLast">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="LastStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_StationTransit">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Transit" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProblem_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderProblem" Type="Self.OrderProblem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderProblem">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProblem_StaffDisposed">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="OrderProblem" Type="Self.OrderProblem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="OrderProblem">
+              <PropertyRef Name="DisposedStaff" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderProblem_StaffReport">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="OrderProblem" Type="Self.OrderProblem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="OrderProblem">
+              <PropertyRef Name="ReportStaff" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_Staff">
+          <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="StaffID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="Packer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_StationReceive">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="ReceivingStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_StationSend">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="SendingStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Package_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Package">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShippingRates_Station">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="ShippingRates" Type="Self.ShippingRate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="ShippingRates">
+              <PropertyRef Name="ReceivingStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShippingRates_StationSend">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="ShippingRates" Type="Self.ShippingRate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="ShippingRates">
+              <PropertyRef Name="SendingStation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Staff_Station">
+          <End Role="Station" Type="Self.Station" Multiplicity="1" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="StationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Linehaul_Package">
+          <End Role="Linehaul" Type="Self.Linehaul" Multiplicity="*" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+        </Association>
+        <Association Name="Package_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <End Role="Package" Type="Self.Package" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="DeliveryDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Linehauls" EntityType="Self.Linehaul" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
+          <EntitySet Name="OrderProblems" EntityType="Self.OrderProblem" />
+          <EntitySet Name="Packages" EntityType="Self.Package" />
+          <EntitySet Name="ShippingRates" EntityType="Self.ShippingRate" />
+          <EntitySet Name="Staffs" EntityType="Self.Staff" />
+          <EntitySet Name="Stations" EntityType="Self.Station" />
+          <EntitySet Name="Status" EntityType="Self.Status" />
+          <EntitySet Name="Vehicles" EntityType="Self.Vehicle" />
+          <AssociationSet Name="FK_Linehaul_StaffDriving" Association="Self.FK_Linehaul_StaffDriving">
+            <End Role="Staff" EntitySet="Staffs" />
+            <End Role="Linehaul" EntitySet="Linehauls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_StaffOperator" Association="Self.FK_Linehaul_StaffOperator">
+            <End Role="Staff" EntitySet="Staffs" />
+            <End Role="Linehaul" EntitySet="Linehauls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linehaul_Vehicle" Association="Self.FK_Linehaul_Vehicle">
+            <End Role="Vehicle" EntitySet="Vehicles" />
+            <End Role="Linehaul" EntitySet="Linehauls" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StaffCreate" Association="Self.FK_Order_StaffCreate">
+            <End Role="Staff" EntitySet="Staffs" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StationCurrent" Association="Self.FK_Order_StationCurrent">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StationFirst" Association="Self.FK_Order_StationFirst">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StationLast" Association="Self.FK_Order_StationLast">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_StationTransit" Association="Self.FK_Order_StationTransit">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Order" Association="Self.FK_OrderItems_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProblem_Order" Association="Self.FK_OrderProblem_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderProblem" EntitySet="OrderProblems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProblem_StaffDisposed" Association="Self.FK_OrderProblem_StaffDisposed">
+            <End Role="Staff" EntitySet="Staffs" />
+            <End Role="OrderProblem" EntitySet="OrderProblems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderProblem_StaffReport" Association="Self.FK_OrderProblem_StaffReport">
+            <End Role="Staff" EntitySet="Staffs" />
+            <End Role="OrderProblem" EntitySet="OrderProblems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_Staff" Association="Self.FK_Package_Staff">
+            <End Role="Staff" EntitySet="Staffs" />
+            <End Role="Package" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_StationReceive" Association="Self.FK_Package_StationReceive">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Package" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_StationSend" Association="Self.FK_Package_StationSend">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Package" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Package_Status" Association="Self.FK_Package_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Package" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShippingRates_Station" Association="Self.FK_ShippingRates_Station">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="ShippingRates" EntitySet="ShippingRates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShippingRates_StationSend" Association="Self.FK_ShippingRates_StationSend">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="ShippingRates" EntitySet="ShippingRates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Staff_Station" Association="Self.FK_Staff_Station">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Staff" EntitySet="Staffs" />
+          </AssociationSet>
+          <AssociationSet Name="Linehaul_Package" Association="Self.Linehaul_Package">
+            <End Role="Linehaul" EntitySet="Linehauls" />
+            <End Role="Package" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="Package_Order" Association="Self.Package_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Package" EntitySet="Packages" />
+          </AssociationSet>
+          <AssociationSet Name="LINEHAUL_ORDER" Association="DeliveryDatabaseModel.LINEHAUL_ORDER">
+            <End Role="Linehaul" EntitySet="Linehauls" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <EntitySet Name="Order_Status" EntityType="DeliveryDatabaseModel.Order_Status" />
+          <AssociationSet Name="FK_Order_Status_Order" Association="DeliveryDatabaseModel.FK_Order_Status_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status_Station" Association="DeliveryDatabaseModel.FK_Order_Status_Station">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Status_Status" Association="DeliveryDatabaseModel.FK_Order_Status_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Order_Status" EntitySet="Order_Status" />
+          </AssociationSet>
+          </EntityContainer>
+        <Association Name="LINEHAUL_ORDER">
+          <End Type="DeliveryDatabaseModel.Linehaul" Role="Linehaul" Multiplicity="*" />
+          <End Type="DeliveryDatabaseModel.Order" Role="Order" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Order_Status">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="StatusID" />
+            <PropertyRef Name="StationID" />
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="OrderID" Type="String" Nullable="false" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="StatusID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="StationID" Type="String" Nullable="false" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Order" Relationship="DeliveryDatabaseModel.FK_Order_Status_Order" FromRole="Order_Status" ToRole="Order" />
+          <NavigationProperty Name="Station" Relationship="DeliveryDatabaseModel.FK_Order_Status_Station" FromRole="Order_Status" ToRole="Station" />
+          <NavigationProperty Name="Status" Relationship="DeliveryDatabaseModel.FK_Order_Status_Status" FromRole="Order_Status" ToRole="Status" />
+        </EntityType>
+        <Association Name="FK_Order_Status_Order">
+          <End Type="DeliveryDatabaseModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="DeliveryDatabaseModel.Order_Status" Role="Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status_Station">
+          <End Type="DeliveryDatabaseModel.Station" Role="Station" Multiplicity="1" />
+          <End Type="DeliveryDatabaseModel.Order_Status" Role="Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="StationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Status_Status">
+          <End Type="DeliveryDatabaseModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="DeliveryDatabaseModel.Order_Status" Role="Order_Status" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusID" />
+            </Principal>
+            <Dependent Role="Order_Status">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DeliveryDatabaseModelStoreContainer" CdmEntityContainer="DeliveryDatabaseEntities">
+          <EntitySetMapping Name="Linehauls">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Linehaul">
+              <MappingFragment StoreEntitySet="Linehaul">
+                <ScalarProperty Name="LinehaulID" ColumnName="LinehaulID" />
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="NumberOfPackage" ColumnName="NumberOfPackage" />
+                <ScalarProperty Name="NumberOfOrder" ColumnName="NumberOfOrder" />
+                <ScalarProperty Name="Seal" ColumnName="Seal" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="Driver" ColumnName="Driver" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="OnDelivering" ColumnName="OnDelivering" />
+                <ScalarProperty Name="OrderPrice" ColumnName="OrderPrice" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="SenderName" ColumnName="SenderName" />
+                <ScalarProperty Name="SenderAddress" ColumnName="SenderAddress" />
+                <ScalarProperty Name="SenderPhone" ColumnName="SenderPhone" />
+                <ScalarProperty Name="SenderEmail" ColumnName="SenderEmail" />
+                <ScalarProperty Name="ReceiverName" ColumnName="ReceiverName" />
+                <ScalarProperty Name="ReceiverAddress" ColumnName="ReceiverAddress" />
+                <ScalarProperty Name="ReceiverPhone" ColumnName="ReceiverPhone" />
+                <ScalarProperty Name="FirstStation" ColumnName="FirstStation" />
+                <ScalarProperty Name="Transit" ColumnName="Transit" />
+                <ScalarProperty Name="LastStation" ColumnName="LastStation" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="TotalWeight" ColumnName="TotalWeight" />
+                <ScalarProperty Name="CurrentStationID" ColumnName="CurrentStationID" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderProblems">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.OrderProblem">
+              <MappingFragment StoreEntitySet="OrderProblem">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IsDisposed" ColumnName="IsDisposed" />
+                <ScalarProperty Name="Continuable" ColumnName="Continuable" />
+                <ScalarProperty Name="ReportStaff" ColumnName="ReportStaff" />
+                <ScalarProperty Name="DisposedStaff" ColumnName="DisposedStaff" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Packages">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Package">
+              <MappingFragment StoreEntitySet="Package">
+                <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CompleteTime" ColumnName="CompleteTime" />
+                <ScalarProperty Name="NumberOfOrder" ColumnName="NumberOfOrder" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="TotalWeight" ColumnName="TotalWeight" />
+                <ScalarProperty Name="Packer" ColumnName="Packer" />
+                <ScalarProperty Name="SendingStation" ColumnName="SendingStation" />
+                <ScalarProperty Name="ReceivingStation" ColumnName="ReceivingStation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShippingRates">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.ShippingRate">
+              <MappingFragment StoreEntitySet="ShippingRates">
+                <ScalarProperty Name="SendingStation" ColumnName="SendingStation" />
+                <ScalarProperty Name="ReceivingStation" ColumnName="ReceivingStation" />
+                <ScalarProperty Name="MinPrice" ColumnName="MinPrice" />
+                <ScalarProperty Name="PricePerKg" ColumnName="PricePerKg" />
+                <ScalarProperty Name="MinPriceForHVO" ColumnName="MinPriceForHVO" />
+                <ScalarProperty Name="PricePerKgForHVO" ColumnName="PricePerKgForHVO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Staffs">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Staff">
+              <MappingFragment StoreEntitySet="Staff">
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Fullname" ColumnName="Fullname" />
+                <ScalarProperty Name="Male" ColumnName="Male" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stations">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Station">
+              <MappingFragment StoreEntitySet="Station">
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="StationName" ColumnName="StationName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="IsStation" ColumnName="IsStation" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="IsDriver" ColumnName="IsDriver" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehicles">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Vehicle">
+              <MappingFragment StoreEntitySet="Vehicle">
+                <ScalarProperty Name="VehicleNumber" ColumnName="VehicleNumber" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Linehaul_Package" TypeName="DeliveryDatabaseModel.Linehaul_Package" StoreEntitySet="Linehaul_Package">
+            <EndProperty Name="Linehaul">
+              <ScalarProperty Name="LinehaulID" ColumnName="LinehaulID" />
+            </EndProperty>
+            <EndProperty Name="Package">
+              <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Package_Order" TypeName="DeliveryDatabaseModel.Package_Order" StoreEntitySet="Package_Order">
+            <EndProperty Name="Order">
+              <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+            </EndProperty>
+            <EndProperty Name="Package">
+              <ScalarProperty Name="PackageID" ColumnName="PackageID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="LINEHAUL_ORDER" TypeName="DeliveryDatabaseModel.LINEHAUL_ORDER" StoreEntitySet="LINEHAUL_ORDER">
+            <EndProperty Name="Order">
+              <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+            </EndProperty>
+            <EndProperty Name="Linehaul">
+              <ScalarProperty Name="LinehaulID" ColumnName="LinehaulID" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Order_Status">
+            <EntityTypeMapping TypeName="DeliveryDatabaseModel.Order_Status">
+              <MappingFragment StoreEntitySet="Order_Status">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="StationID" ColumnName="StationID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

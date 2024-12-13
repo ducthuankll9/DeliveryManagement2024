@@ -1,0 +1,81 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Order>
+
+@{
+    ViewBag.Title = "Nhận đơn";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+
+    string errValue = (TempData["ErrValue"] == null) ? "" : TempData["ErrValue"].ToString();
+}
+
+<!-- Message to View -->
+@if (TempData["Error"] != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <audio id="NotificationAudio" src="~/Areas/StationStaffs/Common/Audio/e-oh.mp3" autostart="false" preload="auto"></audio>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="form-group alert alert-success alert-dismissible fade show alertFront" role="alert">
+        <i class="far fa-check-circle"></i>
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <audio id="NotificationAudio" src="~/Areas/StationStaffs/Common/Audio/succesful.mp3" autostart="false" preload="auto"></audio>
+}
+<script>
+    window.onload = function () {
+        var audioElement = document.getElementById("NotificationAudio");
+        if (audioElement != null) {
+            audioElement.play();
+        }
+    }
+</script>
+
+
+<h2>Nhận đơn</h2>
+
+@using (Html.BeginForm("ReceivingOrder", "OrderProcessing", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <input class="form-control text-box single-line" id="OrderID" name="OrderID" type="text" value="@errValue" placeholder="Mã đơn" autofocus onfocus="select()">
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Thêm &#10133; " class="btn btn-outline-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<hr />
+<h5>Danh sách đơn hàng đã nhận tại trạm</h5>
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.OrderID)</th>
+        <th>@Html.DisplayNameFor(model => model.ReceiverAddress)</th>
+        <th>@Html.DisplayNameFor(model => model.ReceiverPhone)</th>
+        <th>@Html.DisplayNameFor(model => model.CurrentStationID)</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="color:blue;">@Html.ActionLink(item.OrderID, "Details", new { id = item.OrderID.Trim() })</td>
+            <td>@Html.DisplayFor(modelItem => item.ReceiverAddress)</td>
+            <td>@Html.DisplayFor(modelItem => item.ReceiverPhone)</td>
+            <td>@Html.DisplayFor(modelItem => item.Station.StationName)</td>
+        </tr>
+    }
+
+</table>

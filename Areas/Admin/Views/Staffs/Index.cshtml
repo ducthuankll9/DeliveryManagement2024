@@ -1,0 +1,64 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Staff>
+
+@{
+    ViewBag.Title = "Danh sách NV";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+}
+
+<h2>Danh sách tài khoản</h2>
+
+<p>
+    <a href="@Url.Action("Create","Staffs")">
+        <i class="fa fa-plus-circle"></i> Thêm nhân viên mới
+    </a>
+</p>
+<table class="table text-start align-middle table-bordered table-hover mb-0">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StaffID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fullname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Male)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Birthday)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StationID)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fullname)
+            </td>
+            <td>
+                @if (item.Male)
+                {<div>Nam</div> }
+                else
+                { <div>Nữ</div>}
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Birthday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Station.StationName)
+            </td>
+            <td style="color:blue;">
+                @Html.ActionLink("Cập nhật", "Edit", new { id = item.StaffID.Trim() }) |
+                @Html.ActionLink("Xem chi tiết", "Details", new { id = item.StaffID.Trim() }) |
+                @Html.ActionLink("Xóa", "Delete", new { id = item.StaffID.Trim() })
+            </td>
+        </tr>
+    }
+
+</table>

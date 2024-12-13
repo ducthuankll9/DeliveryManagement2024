@@ -1,0 +1,41 @@
+﻿@model DeliveryManagement.Models.Vehicle
+
+@{
+    ViewBag.Title = "Xóa phương tiện";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+}
+
+<!-- ViewBag.Error -->
+@if (ViewBag.Error != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>Hãy xem lại</h2>
+
+<h3>Bạn chắc chắn muốn xóa phương tiện sau?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.VehicleNumber)</dt>
+        <dd>@Html.DisplayFor(model => model.VehicleNumber)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Type)</dt>
+        <dd>@Html.DisplayFor(model => model.Type)</dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="XÓA" class="btn btn-danger" />
+            <button type="button" class="btn btn-outline-info">
+                @Html.ActionLink("Quay lại", "Index")
+            </button>
+        </div>
+    }
+</div>

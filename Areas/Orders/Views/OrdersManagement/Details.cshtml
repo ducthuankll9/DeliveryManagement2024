@@ -1,0 +1,111 @@
+﻿@model DeliveryManagement.Models.Order
+
+@{
+    ViewBag.Title = "Chi tiết đơn hàng " + Model.OrderID;
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-6">
+        <h2>Chi tiết đơn hàng @Model.OrderID</h2>
+    </div>
+    <div class="col-lg-6">
+        <div style="float:right;">
+            @Html.ActionLink("Chỉnh sửa", "Edit", new { id = Model.OrderID.Trim() }, new { @class = "btn btn-outline-success" })
+            @Html.ActionLink("Xóa", "Delete", new { id = Model.OrderID.Trim() }, new { @class = "btn btn-outline-danger" })
+            @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-outline-info" })
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4>" style="padding:1%;">
+                <h5>Thông tin chung</h5>
+                <table>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.SenderName)</td>
+                        <th>@Html.DisplayFor(model => model.SenderName)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.SenderAddress)</td>
+                        <th>@Html.DisplayFor(model => model.SenderAddress)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.SenderPhone)</td>
+                        <th>@Html.DisplayFor(model => model.SenderPhone)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.SenderEmail)</td>
+                        <th>@Html.DisplayFor(model => model.SenderEmail)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.ReceiverName)</td>
+                        <th>@Html.DisplayFor(model => model.ReceiverName)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.ReceiverAddress)</td>
+                        <th>@Html.DisplayFor(model => model.ReceiverAddress)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.ReceiverPhone)</td>
+                        <th>@Html.DisplayFor(model => model.ReceiverPhone)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Fee)</td>
+                        <th>@Html.DisplayFor(model => model.Fee)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Paid)</td>
+                        @if (Model.Paid)
+                        {
+                            <th>Đã thanh toán</th>
+                        }
+                        else
+                        {
+                            <th>Chưa thanh toán</th>
+                        }
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.TotalWeight)</td>
+                        <th>@Html.DisplayFor(model => model.TotalWeight)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.OrderPrice)</td>
+                        <th>@Html.DisplayFor(model => model.OrderPrice)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.Creator)</td>
+                        <th>@Html.DisplayFor(model => model.Staff.StaffID) - @Html.DisplayFor(model => model.Staff.Fullname)</th>
+                    </tr>
+                    <tr>
+                        <td>Lộ trình</td>
+                        <th>@Html.DisplayFor(model => model.Station1.StationName) @(string.IsNullOrWhiteSpace(Model.Transit) ? " &#8594; " + Html.DisplayFor(model => model.Station3.StationName) : "" ) &#8594; @Html.DisplayFor(model => model.Station2.StationName)</th>
+                    </tr>
+                    <tr>
+                        <td>@Html.DisplayNameFor(model => model.CurrentStationID)</td>
+                        <th>@Html.DisplayFor(model => model.Station.StationName)</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-4>" style="padding:1%;">
+                <h5>Lịch sử đơn hàng</h5>
+                    @{ 
+                        Html.RenderAction("_ListStatusOfAnOrder", "OrderStatusHistory", new { orderId = Model.OrderID.Trim() });
+                    }
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <h5>Danh sách sản phẩm</h5>
+    <div>
+        @{
+            Html.RenderAction("_ListOrderItem", "OrderItems", new { orderId = Model.OrderID.Trim(), isDetails = true });
+        }
+    </div>
+</div>
+

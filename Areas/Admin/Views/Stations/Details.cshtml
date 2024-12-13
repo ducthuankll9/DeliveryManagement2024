@@ -1,0 +1,32 @@
+﻿@model DeliveryManagement.Models.Station
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+
+    string strFunction = "";
+    if(Model.IsAdmin) { strFunction += "Quản trị viên"; }
+    if(Model.IsStation) { strFunction += (strFunction == "" ? "" : " - ") + "Trạm giao nhận"; }
+    if(Model.IsDriver) { strFunction += (strFunction == "" ? "" : " - ") + "Chức năng tài xế"; }
+}
+
+<h2>Thông tin đơn vị/trạm @Model.StationID</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.StationName)</dt>
+        <dd>@Html.DisplayFor(model => model.StationName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Address)</dt>
+        <dd>@Html.DisplayFor(model => model.Address)</dd>
+
+        <dt>Chức năng có thể sử dụng trên hệ thống:</dt>
+        <dd>@strFunction</dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Chỉnh sửa", "Edit", new { id = Model.StationID.Trim() }, new { @class = "btn btn-outline-success" })
+    @Html.ActionLink("Xóa", "Delete", new { id = Model.StationID.Trim() }, new { @class = "btn btn-outline-danger" })
+    @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-outline-info" })
+</p>

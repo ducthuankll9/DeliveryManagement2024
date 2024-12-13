@@ -1,0 +1,65 @@
+﻿@model IEnumerable<DeliveryManagement.Models.ShippingRate>
+
+@{
+    ViewBag.Title = "Danh sách các tuyến vận chuyển";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+}
+
+<h2>Danh sách các tuyến vận chuyển</h2>
+
+<p>
+    <a href="@Url.Action("Create","ShippingRates")">
+        <i class="fa fa-plus-circle"></i> Thêm 1 tuyến mới
+    </a>
+</p>
+<table class="table text-start align-middle table-bordered table-hover mb-0">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SendingStation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReceivingStation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PricePerKg)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MinPriceForHVO)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PricePerKgForHVO)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Station1.StationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Station.StationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PricePerKg)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MinPriceForHVO)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PricePerKgForHVO)
+        </td>
+        <td style="color:blue;">
+            @Html.ActionLink("Cập nhật", "Edit", new { SendingID = item.SendingStation.Trim(), ReceivingID = item.ReceivingStation.Trim() }) |
+            @Html.ActionLink("Xóa", "Delete", new { SendingID = item.SendingStation.Trim(), ReceivingID = item.ReceivingStation.Trim() })
+        </td>
+    </tr>
+}
+
+</table>

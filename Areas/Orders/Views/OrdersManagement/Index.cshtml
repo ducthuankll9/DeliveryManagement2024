@@ -1,0 +1,63 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Order>
+
+@{
+    ViewBag.Title = "Danh sách đơn";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<!-- Message to View -->
+@if (ViewBag.Error != null || TempData["Error"] != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="form-group alert alert-success alert-dismissible fade show alertFront" role="alert">
+        <i class="far fa-check-circle"></i>
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>Danh sách đơn</h2>
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.OrderID)</th>
+        <th>@Html.DisplayNameFor(model => model.ReceiverAddress)</th>
+        <th>@Html.DisplayNameFor(model => model.ReceiverPhone)</th>
+        <th>@Html.DisplayNameFor(model => model.CurrentStationID)</th>
+        <th>@Html.DisplayNameFor(model => model.FirstStation)</th>
+        <th>@Html.DisplayNameFor(model => model.Transit)</th>
+        <th>@Html.DisplayNameFor(model => model.LastStation)</th>
+        <th>@Html.DisplayNameFor(model => model.Fee)</th>
+        <th>@Html.DisplayNameFor(model => model.Paid)</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="color:blue;">@Html.ActionLink(item.OrderID, "Details", new { id = item.OrderID.Trim() })</td>
+            <td>@Html.DisplayFor(modelItem => item.ReceiverAddress)</td>
+            <td>@Html.DisplayFor(modelItem => item.ReceiverPhone)</td>
+            <td>@Html.DisplayFor(modelItem => item.Station.StationName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Station1.StationName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Station3.StationName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Station2.StationName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Fee)</td>
+            @if (item.Paid)
+            {
+                <td>Đã TT</td>
+            }
+            else
+            {
+                <td>Chưa TT</td>
+            }
+        </tr>
+    }
+
+</table>

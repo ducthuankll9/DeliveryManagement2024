@@ -1,0 +1,39 @@
+﻿@model DeliveryManagement.Models.Staff
+
+@{
+    ViewBag.Title = "Thông tin NV";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLightLayout.cshtml";
+}
+
+<h2>Thông tin chi tiết tài khoản @Model.StaffID</h2>
+<hr />
+
+<div class="row g-4">
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.StaffID)</dt>
+        <dd>@Html.DisplayFor(model => model.StaffID)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Fullname)</dt>
+        <dd>@Html.DisplayFor(model => model.Fullname)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Male)</dt>
+        <dd>
+            @if (Model.Male)
+            {<div>Nam</div> }
+            else
+            { <div>Nữ</div>}
+        </dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Birthday)</dt>
+        <dd>@Html.DisplayFor(model => model.Birthday)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.StationID)</dt>
+        <dd>@Html.DisplayFor(model => model.Station.StationName)</dd>
+    </dl>
+
+    <p>
+        @Html.ActionLink("Chỉnh sửa", "Edit", new { id = Model.StaffID.Trim() }, new { @class = "btn btn-outline-success" })
+        @Html.ActionLink("Xóa", "Delete", new { id = Model.StaffID.Trim() }, new { @class = "btn btn-outline-danger" })
+        @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-outline-info" })
+    </p>
+</div>

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Order_Status>
+    @{ 
+        string stationID = "";
+    }
+
+<table>
+
+    @foreach (var item in Model)
+    {
+        if (item.StationID != stationID)
+        {
+            stationID = item.StationID;
+            <tr>
+                <th colspan="2" style="padding: 1rem 0rem 0rem 0rem; ">
+                    @Html.DisplayFor(modelItem => item.Station.StationName)
+                </th>
+            </tr>
+        }
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.StatusName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+        </tr>
+    }
+
+</table>

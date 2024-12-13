@@ -1,0 +1,52 @@
+﻿body {
+}
+
+a {
+    text-decoration:none;
+    color: inherit;
+}
+
+a:hover {
+    color: inherit;
+}
+
+.alertFront {
+    position: relative;
+    z-index:100;
+}
+
+.inlineBl {
+    display: inline-block;
+}
+
+.tableHistory {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .tableHistory > tbody > tr > * {
+        padding: 0.5rem 0.5rem;
+        background-color: var(--bs-table-bg);
+        border-bottom-width: 1px;
+        box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+    }
+
+    .tableHistory > .tableS {
+        height: 200%;
+        background-color: #f2f2f2; /* Màu nền cho các dòng chẵn */
+        border-bottom: 1px solid black;
+        padding: 8px;
+    }
+
+    .tableHistory > .tableF {
+        height: 100%;
+        background-color: #ffffff; /* Màu nền cho các dòng lẻ */
+    }
+
+.secondRow {
+}
+
+    .secondRow td {
+        height: 200%;
+        padding: 0rem 2rem 1rem 2rem;
+    }

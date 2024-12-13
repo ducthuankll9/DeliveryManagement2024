@@ -1,0 +1,172 @@
+﻿@{ string iPath = "~/Images/User/" + Session["Avatar"]; }
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title - ADMIN</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="~/Areas/Admin/Common/Dark_Layout/images/Logo3.ico" rel="icon">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fortawesome.com/kits/ffe176a3/publications/124599/woff2.css" media="all">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-10/css/all.min.css" integrity="sha512-Pv1WJMqAtVgNNct5vhq+4cgkKinKpV1jCwSWD4am9CjwxsJSCkLWKcE/ZBqHnEE1mHs01c8B0GMvcn/pQ/yrog==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="~/Areas/Admin/Common/Dark_Layout/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="~/Areas/Admin/Common/Dark_Layout/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/Areas/Admin/Common/Dark_Layout/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Template Stylesheet -->
+    <link href="~/Areas/Admin/Common/Dark_Layout/css/style.css" rel="stylesheet" />
+
+    @RenderSection("scripts", required: false)
+</head>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <a href="@Url.Action("Index", "Home", new { area = "" })" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-truck me-2"></i>QLGH</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="ms-3">
+                        <h6 class="mb-0">@Session["HoTen"]</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="@Url.Action("Index", "Home")" class="nav-item nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Home" ? "active" : "")">
+                        <i class="fa fa-home me-2"></i>Trang chủ
+                    </a>
+                    <a href="@Url.Action("Index", "Staffs")" class="nav-item nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Staff" ? "active" : "")">
+                        <i class="fa fa-users me-2"></i>Nhân viên
+                    </a>
+                    <a href="@Url.Action("Index", "Stations")" class="nav-item nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Stations" ? "active" : "")">
+                        <i class="fa fa-list me-2"></i>Đơn vị
+                    </a>
+                    <!---->
+                    <a href="@Url.Action("Index", "Vehicles")" class="nav-item nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Vehicles" ? "active" : "")">
+                        <i class="fa fa-truck me-2"></i>Phương tiện
+                    </a>
+                    <!---->
+
+                    <a href="@Url.Action("Index", "OrderProblems")" class="nav-item nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "OrderProblems" ? "active" : "")">
+                        <i style="font-size:20px" class="fa">&#xf013; </i> Xử lý sự cố
+                    </a>
+
+                    <!---->
+                    <a href="@Url.Action("Index", "ShippingRates")" class="nav-item nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "ShippingRates" ? "active" : "")">
+                        <i class="fa fa-dollar-sign me-2"></i>Điều chỉnh cước
+                    </a>
+                    <!---->
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+                <!-- Logobrand fa-paw khi cửa sổ thu nhỏ -->
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-paw"></i></h2>
+                </a>
+
+                <!-- Nút ẩn hiện menu trái -->
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <!-- Nút ẩn hiện menu trái End -->
+                <!-- Hộp tìm kiếm -->
+                <!-- Hộp tìm kiếm End -->
+                <!-- Thông báo và Profile -->
+                <div class="navbar-nav align-items-center ms-auto">
+                    <!-- Profile -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="@Url.Content(iPath)" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">@Session["HoTen"]</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            <a href="@Url.Action("TrangCaNhan", "TaiKhoan", new { area = "", id = Session["TenDangNhap"] })" class="dropdown-item">
+                                Tài khoản
+                                <div class="btn-outline-info" style="float:right;">
+                                    <i class="fa fa-eye"></i>
+                                </div>
+                            </a>
+                            <a href="@Url.Action("DangXuat","Menu")" class="dropdown-item">
+                                Đăng xuất
+                                <div class="btn-outline-primary" style="float:right;">
+                                    <i class="fa fa-power-off"></i>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Profile End -->
+                </div>
+                <!-- Thông báo và Profile End -->
+            </nav>
+            <!-- Navbar End -->
+            <!-- View() Start -->
+            <div class="container-fluid pt-4 px-4 renderBody">
+                <div class="bg-secondary rounded p-4">
+                    @RenderBody()
+                </div>
+            </div>
+
+            <!-- View() End -->
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4" style="position:sticky; top:100%; color:white">
+                <div class="bg-secondary rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="#">Trang Admin</a>, Hệ thống quản lý giao hàng.
+                        </div>
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            Phát triển bởi: <a href="https://facebook.com/99kll">Đức Thuận - FB: 99kll</a>
+
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            <br />Thiết kế: <a href="https://htmlcodex.com">HTML Codex</a>
+                            <br>Phân phối thiết kế: <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-sm btn-outline-info btn-sm-square back-to-top" style="float:right;"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Areas/Admin/Common/Dark_Layout/lib/chart/chart.min.js"></script>
+    <script src="~/Areas/Admin/Common/Dark_Layout/lib/easing/easing.min.js"></script>
+    <script src="~/Areas/Admin/Common/Dark_Layout/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/Areas/Admin/Common/Dark_Layout/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/Areas/Admin/Common/Dark_Layout/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="~/Areas/Admin/Common/Dark_Layout/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="~/Areas/Admin/Common/Dark_Layout/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="~/Areas/Admin/Common/Dark_Layout/js/main.js"></script>
+
+</body>
+
+</html>
