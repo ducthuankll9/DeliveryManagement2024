@@ -1,0 +1,64 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Package>
+
+@{
+    ViewBag.Title = "Gói hàng";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<h2>Gói hàng</h2>
+
+<button type="button" class="btn btn-outline-secondary">
+    <a href="@Url.Action("Create")">Tạo mới &#10133;</a>
+</button>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PackageID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SendingStation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReceivingStation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfOrder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalWeight)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StatusID)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PackageID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SendingStation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReceivingStation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfOrder)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalWeight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status.StatusName)
+        </td>
+    </tr>
+}
+
+</table>

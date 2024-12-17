@@ -1,0 +1,31 @@
+﻿@model DeliveryManagement.Models.Package
+
+<div class="card">
+    <div class="row">
+        <div class="col-lg-6">
+            Hành trình: @Html.DisplayFor(model => model.Station.StationName) - @Html.DisplayFor(model => model.Station1.StationName)
+        </div>
+        <div class="col-lg-6">
+            @Html.DisplayNameFor(model => model.Packer): @Html.DisplayFor(model => model.Packer) - @Html.DisplayFor(model => model.Staff.Fullname)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            @Html.DisplayNameFor(model => model.NumberOfOrder): @Html.DisplayFor(model => model.NumberOfOrder)
+        </div>
+        <div class="col-lg-4">
+            @Html.DisplayNameFor(model => model.CreateTime): @Html.DisplayFor(model => model.CreateTime)
+        </div>
+        <div class="col-lg-4">
+            @Html.DisplayNameFor(model => model.CompleteTime): @Html.DisplayFor(model => model.CompleteTime)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            @Html.DisplayNameFor(model => model.TotalWeight): @Html.DisplayFor(model => model.TotalWeight)
+        </div>
+        <div class="col-lg-4">
+            @Html.DisplayNameFor(model => model.StatusID): @Html.DisplayFor(model => model.Status.StatusName)
+        </div>
+    </div>
+</div>

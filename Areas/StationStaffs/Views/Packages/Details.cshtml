@@ -1,0 +1,83 @@
+﻿@model DeliveryManagement.Models.Package
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Package</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompleteTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompleteTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfOrder)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfOrder)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalWeight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalWeight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Staff.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Staff.Password)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Station.StationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station.StationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Station1.StationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Station1.StationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status.StatusName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status.StatusName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PackageID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
