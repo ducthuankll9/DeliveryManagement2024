@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "In đơn";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<h5>In đơn</h5>
+
+@using (Html.BeginForm("PrintOrder", "OrdersManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row form-group">
+        <div class="col-lg-8">
+            <input type="text" id="OrderIDs" name="OrderIDs" autofocus placeholder="Mã đơn hàng..." class="col-lg-12"></input>
+        </div>
+        <div class="col-lg-4">
+            <input type="submit" value="IN ĐƠN &#128424;" class="btn btn-outline-success col-lg-6" />
+        </div>
+    </div>
+}
+

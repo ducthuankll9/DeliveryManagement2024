@@ -72,7 +72,7 @@
                                 <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" href="@Url.Action("Index", "OrdersManagement", new { area = "Orders" })">
                                     Danh sách đơn
                                 </a>
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "PrintOrder" && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" href="#">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "PrintOrder" && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" href="@Url.Action("PrintOrder", "OrdersManagement", new { area = "Orders" })">
                                     In đơn
                                 </a>
                                 <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "OrderProblems" ? "active" : "")" href="#">

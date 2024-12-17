@@ -59,8 +59,9 @@ namespace DeliveryManagement.Models
         public string StatusID { get; set; }
 
         [DisplayName("Tổng KL")]
+        [DisplayFormat(DataFormatString = "{0: ## ### ##0.## (kg)}")]
         [Required(ErrorMessage = "Mục này không được để trống!")]
-        [Range(0.1, double.MaxValue, ErrorMessage = "Khối lượng tối thiểu là 0.1kg")]
+        [Range(0.0, double.MaxValue, ErrorMessage = "Khối lượng tối thiểu là 0.0kg")]
         public double TotalWeight { get; set; }
 
         [DisplayName("NV đóng")]

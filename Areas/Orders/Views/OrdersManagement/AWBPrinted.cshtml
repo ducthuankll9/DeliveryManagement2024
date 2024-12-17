@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "AWBPrinted";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+
+    var imgPaths = ViewBag.ListPaths as List<string>;
+}
+
+<h2>Thông tin đơn hàng</h2>
+
+@if (imgPaths != null)
+{
+    foreach (var path in imgPaths)
+    {
+        <img src="@Url.Content(path)" alt="QR" />
+        <hr />
+    }
+}

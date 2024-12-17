@@ -28,6 +28,12 @@ namespace DeliveryManagement.Helper
         public const string DB_TableOrderItems = "OrderItems";
         public const string DB_TableOrderProblem = "OrderProblem";
         public const string DB_TablePackage = "Package";
+            public const string DB_Package_NumOrder = "NumberOfOrder";
+            public const string DB_Package_Weight = "TotalWeight";
+            public const string DB_Package_Send = "SendingStation";
+            public const string DB_Package_Receive = "ReceivingStation";
+            public const string DB_Package_ID = "PackageID";
+
         public const string DB_TablePackageOrder = "Package_Order";
         public const string DB_TableShippingRates = "ShippingRates";
         public const string DB_TableStaff = "Staff";

@@ -1,10 +1,8 @@
 ﻿@model DeliveryManagement.Models.Package_Order
 
 @{
-    ViewBag.Title = "Đóng gói " + ViewBag.PackageID;
+    ViewBag.Title = "Đóng gói " + Model.PackageID;
     Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
-
-    string errValue = (TempData["ErrValue"] == null) ? "" : TempData["ErrValue"].ToString();
 }
 
 <!-- Message to View -->
@@ -26,6 +24,14 @@
     </div>
     <audio id="NotificationAudio" src="~/Areas/StationStaffs/Common/Audio/succesful.mp3" autostart="false" preload="auto"></audio>
 }
+@if (TempData["Warning"] != null)
+{
+    <div class="form-group alert alert-warning alert-dismissible fade show alertFront" role="alert">
+        <i class="far fa-check-circle"></i>
+        @TempData["Warning"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <script>
     window.onload = function () {
         var audioElement = document.getElementById("NotificationAudio");
@@ -35,29 +41,39 @@
     }
 </script>
 
+<h2>Đóng gói @Model.PackageID</h2>
 
-<h2>Đóng gói @ViewBag.PackageID</h2>
+@{
+    Html.RenderAction("_ShortPackageDetails", "Packages", new { packageId = Model.PackageID });
+}
 
-@using (Html.BeginForm())
+<br />
+
+@using (Html.BeginForm("Packing", "Packages", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.PackageID, new { @value = ViewBag.PackageID })
-    @Html.HiddenFor(model => model.AddTime);
-    @Html.ValidationMessageFor(model => model.AddTime, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.PackageID)
+        @Html.HiddenFor(model => model.AddTime)
+        @Html.ValidationMessageFor(model => model.AddTime, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mã đơn", @value = @errValue } });
-                @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
-            </div>
-            <div class="col-md-6">
-                <input type="submit" value="Thêm &#10133; " class="btn btn-outline-success" />
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.OrderID, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mã đơn", @autofocus = "autofocus", @onfocus = "select()" } })
+                    @Html.ValidationMessageFor(model => model.OrderID, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Thêm &#10133; " class="btn btn-outline-success" />
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
+
+<hr />
+@{
+    Html.RenderAction("_ListOrderInPackage", "OrderInPackage", new { packageId = Model.PackageID, isDetails = false });
 }

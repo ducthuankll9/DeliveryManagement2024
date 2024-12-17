@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,6 +14,7 @@ using System.Web.Mvc;
 using DeliveryManagement.Helper;
 using DeliveryManagement.Models;
 using Microsoft.Ajax.Utilities;
+using QRCoder;
 
 namespace DeliveryManagement.Areas.Orders.Controllers
 {
@@ -22,9 +25,9 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         // GET: Orders/OrdersManagement
         public ActionResult Index()
         {
-            Session["StationName"] = "TODO: do this";
-            Session["StationID"] = "DVHG";
-            Session["StaffName"] = "TODO: do this";
+            Session["StationName"] = "Thành phố Hà Giang";
+            Session["StationID"] = "HGHG";
+            Session["StaffName"] = "Lục Đức Thuận";
             Session["StaffID"] = "NV20230001";
 
             var orders = db.Orders.Include(o => o.Staff).Include(o => o.Station).Include(o => o.Station1).Include(o => o.Station2).Include(o => o.Station3);
@@ -534,6 +537,67 @@ namespace DeliveryManagement.Areas.Orders.Controllers
             db.Orders.Remove(order);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult PrintOrder()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PrintOrder(string OrderIDs)
+        {
+            if(!string.IsNullOrEmpty(OrderIDs))
+            {
+                string[] lines = OrderIDs.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                List<string> listPaths = new List<string>();
+
+                foreach(string line in lines)
+                {
+                    string path = GenerateAndSaveQRCode(line);
+                    listPaths.Add(path);
+                }
+
+                TempData["list"] = listPaths;
+                return RedirectToAction("AWBPrinted");
+            }
+            else
+            {
+                return RedirectToAction("PrintOrder");
+            }
+        }
+
+        private string GenerateAndSaveQRCode(string data)
+        {
+            // Generate QRCode from data
+            QRCodeGenerator generator = new QRCodeGenerator();
+            QRCodeData qrCodeData = generator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImg = qrCode.GetGraphic(10);
+
+            // path to folder OutputData
+            string folderPath = Server.MapPath("~/OutputData/");
+
+            // Check folder is exist or not, if not generate new folder
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            // full path to QR img
+            string qrCodeImgPath = Path.Combine(folderPath, data + ".png");
+
+            // Save img to folder on server as png file
+            qrCodeImg.Save(qrCodeImgPath, ImageFormat.Png);
+
+            // return the path to that file
+            return Path.Combine("/OutputData/", data + ".png");
+        }
+
+        public ActionResult AWBPrinted()
+        {
+            ViewBag.ListPaths = TempData["list"] as List<string>;
+            return View();
         }
 
         protected override void Dispose(bool disposing)

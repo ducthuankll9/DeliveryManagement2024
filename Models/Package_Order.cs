@@ -16,6 +16,12 @@ namespace DeliveryManagement.Models
 
     public partial class Package_Order
     {
+        public Package_Order() { }
+        public Package_Order(string packageID) 
+        {
+            this.PackageID = packageID;
+        }
+
         [Key]
         [DisplayName("Mã kiện hàng")]
         [Required(ErrorMessage = "Mục này không được để trống!")]

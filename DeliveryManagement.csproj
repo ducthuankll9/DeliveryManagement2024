@@ -53,6 +53,11 @@
       <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>packages\QRCoder.1.6.0\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -119,6 +124,7 @@
       <Private>True</Private>
       <HintPath>packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -140,6 +146,7 @@
     <Compile Include="Areas\Orders\Controllers\OrdersManagementController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderStatusHistoryController.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Compile Include="Areas\StationStaffs\Controllers\OrderInPackageController.cs" />
     <Compile Include="Areas\StationStaffs\Controllers\OrderProcessingController.cs" />
     <Compile Include="Areas\StationStaffs\Controllers\PackagesController.cs" />
     <Compile Include="Areas\StationStaffs\StationStaffsAreaRegistration.cs" />
@@ -339,6 +346,11 @@
     <Content Include="Models\DeliveryMngDBModels.edmx.diagram">
       <DependentUpon>DeliveryMngDBModels.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\StationStaffs\Views\Packages\Packing.cshtml" />
+    <Content Include="Areas\StationStaffs\Views\OrderInPackage\_ListOrderInPackage.cshtml" />
+    <Content Include="Areas\StationStaffs\Views\Packages\_ShortPackageDetails.cshtml" />
+    <Content Include="Areas\Orders\Views\OrdersManagement\PrintOrder.cshtml" />
+    <Content Include="Areas\Orders\Views\OrdersManagement\AWBPrinted.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -378,6 +390,7 @@
     <Folder Include="Areas\Orders\Views\Shared\" />
     <Folder Include="Areas\StationStaffs\Data\" />
     <Folder Include="Images\User\" />
+    <Folder Include="OutputData\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
