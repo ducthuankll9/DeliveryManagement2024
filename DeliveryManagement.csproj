@@ -53,6 +53,14 @@
       <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1001\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>packages\MicrosoftOfficeCore.15.0.0\lib\net35\Office.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="QRCoder, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
@@ -155,6 +163,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\Constants.cs" />
+    <Compile Include="Helper\ExcelHelper.cs" />
     <Compile Include="Helper\InitFileReader.cs" />
     <Compile Include="Models\DeliveryMngDBModels.Context.cs">
       <AutoGen>True</AutoGen>
@@ -277,6 +286,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\404cutted.gif" />
+    <Content Include="Images\500-internal-server-error.png" />
     <Content Include="Images\package.ico" />
     <Content Include="Images\ErrorTruck.png" />
     <Content Include="Models\DeliveryMngDBModels.Context.tt">
@@ -289,6 +299,7 @@
       <DependentUpon>DeliveryMngDBModels.edmx</DependentUpon>
       <LastGenOutput>DeliveryMngDBModels.cs</LastGenOutput>
     </Content>
+    <Content Include="OutputData\Untitled.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -351,6 +362,8 @@
     <Content Include="Areas\StationStaffs\Views\Packages\_ShortPackageDetails.cshtml" />
     <Content Include="Areas\Orders\Views\OrdersManagement\PrintOrder.cshtml" />
     <Content Include="Areas\Orders\Views\OrdersManagement\AWBPrinted.cshtml" />
+    <Content Include="Areas\Orders\Views\OrdersManagement\PreviewOrder.cshtml" />
+    <Content Include="Images\500-internal-server-error.pdf" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -378,6 +391,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_CommonLayout.cshtml" />
     <Content Include="Setup\SET.ini" />
+    <Content Include="Setup\BillTemplate.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Common\Lib\" />
@@ -390,7 +404,9 @@
     <Folder Include="Areas\Orders\Views\Shared\" />
     <Folder Include="Areas\StationStaffs\Data\" />
     <Folder Include="Images\User\" />
-    <Folder Include="OutputData\" />
+    <Folder Include="OutputData\Excel\" />
+    <Folder Include="OutputData\Image\" />
+    <Folder Include="OutputData\PDF\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

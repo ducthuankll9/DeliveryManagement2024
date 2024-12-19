@@ -9,6 +9,18 @@ namespace DeliveryManagement.Helper
     {
         public const string defaultString = "creating";
 
+        // path
+        public const string Path_Excel = @"C:\DeliveryManagement\OutputData\Excel\";
+        public const string ServerPath_Excel = @"~\OutputData\Excel\";
+        public const string Path_Image = @"C:\DeliveryManagement\OutputData\Image\";
+        public const string ServerPath_Image = @"~\OutputData\Image\";
+        public const string Path_PDF = @"C:\DeliveryManagement\OutputData\PDF\";
+        public const string ServerPath_PDF = @"~\OutputData\PDF\";
+        public const string SortServerPath_PDF = @"\OutputData\PDF\";
+        
+        public const string Path_PDF500 = @"\Images\500-internal-server-error.pdf";
+        public const string Template_Bill = "BillTemplate.xlsx";
+
         // DATABASE
         public const string DB_DBNAME = "DeliveryDatabase";
         

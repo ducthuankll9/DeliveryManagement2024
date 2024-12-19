@@ -549,17 +549,48 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         {
             if(!string.IsNullOrEmpty(OrderIDs))
             {
-                string[] lines = OrderIDs.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] listIDs = OrderIDs.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
                 List<string> listPaths = new List<string>();
 
-                foreach(string line in lines)
+                foreach(string id in listIDs)
                 {
-                    string path = GenerateAndSaveQRCode(line);
-                    listPaths.Add(path);
+                    Order order = db.Orders.Find(id);
+                    if(order != null)
+                    {
+                        bool bolGenPdf = false;
+
+                        string QRpath = GenerateAndSaveQRCode(id);
+
+                        string templatePath = Path.Combine(Server.MapPath("~/Setup/"), Constants.Template_Bill);
+                        string outputExcelPath = Constants.Path_Excel + id + ".xlsx";
+                        if (ExcelHelper.CopyExcelFile(templatePath, outputExcelPath))
+                        {
+                            //string pdfPath = Constants.Path_PDF + id + ".pdf";
+                            string pdfPath = Server.MapPath(Constants.ServerPath_PDF) + id + ".pdf";
+                            bolGenPdf = ExcelHelper.CreateBill(outputExcelPath, order, QRpath, pdfPath);
+                        }
+
+                        if (bolGenPdf)
+                        {
+                            listPaths.Add(Constants.SortServerPath_PDF + id + ".pdf");
+
+                            // DELETE xlsx & QRimg
+                            //TODO
+                        }
+                        else
+                        {
+                            listPaths.Add(Constants.Path_PDF500);
+                        }
+                    }
+                    else
+                    {
+                        // Order not exist
+                    }
+                    
                 }
 
                 TempData["list"] = listPaths;
-                return RedirectToAction("AWBPrinted");
+                return RedirectToAction("PreviewOrder");
             }
             else
             {
@@ -569,32 +600,44 @@ namespace DeliveryManagement.Areas.Orders.Controllers
 
         private string GenerateAndSaveQRCode(string data)
         {
-            // Generate QRCode from data
-            QRCodeGenerator generator = new QRCodeGenerator();
-            QRCodeData qrCodeData = generator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
-            QRCode qrCode = new QRCode(qrCodeData);
-            Bitmap qrCodeImg = qrCode.GetGraphic(10);
-
-            // path to folder OutputData
-            string folderPath = Server.MapPath("~/OutputData/");
-
-            // Check folder is exist or not, if not generate new folder
-            if (!Directory.Exists(folderPath))
+            try
             {
-                Directory.CreateDirectory(folderPath);
+                // path to folder OutputData
+                //string folderPath = Server.MapPath("~/OutputData/");
+                string folderPath = Constants.Path_Image;
+
+                // Check folder is exist or not, if not generate new folder
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                // full path to QR img
+                string fullPath = Path.Combine(folderPath, data + ".png");
+
+                // Generate QRCode from data
+                QRCodeGenerator generator = new QRCodeGenerator();
+                QRCodeData qrCodeData = generator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(qrCodeData);
+                // note: used "using" to avoid exception
+                using (Bitmap qrCodeImg = qrCode.GetGraphic(10))
+                {
+                    // Save img to folder on server as png file
+                    qrCodeImg.Save(fullPath, ImageFormat.Png);
+                }
+
+                // return the path to QR file
+                return fullPath;
+            } 
+            catch
+            {
+                string path500Err = Path.Combine(Server.MapPath("~/Images/"), "500-internal-server-error.pdf");
+                return path500Err;
             }
-
-            // full path to QR img
-            string qrCodeImgPath = Path.Combine(folderPath, data + ".png");
-
-            // Save img to folder on server as png file
-            qrCodeImg.Save(qrCodeImgPath, ImageFormat.Png);
-
-            // return the path to that file
-            return Path.Combine("/OutputData/", data + ".png");
+            
         }
 
-        public ActionResult AWBPrinted()
+        public ActionResult PreviewOrder()
         {
             ViewBag.ListPaths = TempData["list"] as List<string>;
             return View();
