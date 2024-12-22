@@ -37,8 +37,8 @@
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.PackageID)
+        <td style="color:blue;">
+            @Html.ActionLink(item.PackageID,"Packing", new { id = item.PackageID.Trim() })
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.SendingStation)

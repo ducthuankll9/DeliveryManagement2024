@@ -559,7 +559,7 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                     {
                         bool bolGenPdf = false;
 
-                        string QRpath = GenerateAndSaveQRCode(id);
+                        string QRpath = MyQRCodeHelper.GenerateAndSaveQRCode(id);
 
                         string templatePath = Path.Combine(Server.MapPath("~/Setup/"), Constants.Template_Bill);
                         string outputExcelPath = Constants.Path_Excel + id + ".xlsx";
@@ -598,44 +598,44 @@ namespace DeliveryManagement.Areas.Orders.Controllers
             }
         }
 
-        private string GenerateAndSaveQRCode(string data)
-        {
-            try
-            {
-                // path to folder OutputData
-                //string folderPath = Server.MapPath("~/OutputData/");
-                string folderPath = Constants.Path_Image;
+        //private string GenerateAndSaveQRCode(string data)
+        //{
+        //    try
+        //    {
+        //        // path to folder OutputData
+        //        //string folderPath = Server.MapPath("~/OutputData/");
+        //        string folderPath = Constants.Path_Image;
 
-                // Check folder is exist or not, if not generate new folder
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
+        //        // Check folder is exist or not, if not generate new folder
+        //        if (!Directory.Exists(folderPath))
+        //        {
+        //            Directory.CreateDirectory(folderPath);
+        //        }
 
-                // full path to QR img
-                string fullPath = Path.Combine(folderPath, data + ".png");
+        //        // full path to QR img
+        //        string fullPath = Path.Combine(folderPath, data + ".png");
 
-                // Generate QRCode from data
-                QRCodeGenerator generator = new QRCodeGenerator();
-                QRCodeData qrCodeData = generator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
-                QRCode qrCode = new QRCode(qrCodeData);
-                // note: used "using" to avoid exception
-                using (Bitmap qrCodeImg = qrCode.GetGraphic(10))
-                {
-                    // Save img to folder on server as png file
-                    qrCodeImg.Save(fullPath, ImageFormat.Png);
-                }
+        //        // Generate QRCode from data
+        //        QRCodeGenerator generator = new QRCodeGenerator();
+        //        QRCodeData qrCodeData = generator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
+        //        QRCode qrCode = new QRCode(qrCodeData);
+        //        // note: used "using" to avoid exception
+        //        using (Bitmap qrCodeImg = qrCode.GetGraphic(10))
+        //        {
+        //            // Save img to folder on server as png file
+        //            qrCodeImg.Save(fullPath, ImageFormat.Png);
+        //        }
 
-                // return the path to QR file
-                return fullPath;
-            } 
-            catch
-            {
-                string path500Err = Path.Combine(Server.MapPath("~/Images/"), "500-internal-server-error.pdf");
-                return path500Err;
-            }
+        //        // return the path to QR file
+        //        return fullPath;
+        //    } 
+        //    catch
+        //    {
+        //        string path500Err = Path.Combine(Server.MapPath("~/Images/"), "500-internal-server-error.png");
+        //        return path500Err;
+        //    }
             
-        }
+        //}
 
         public ActionResult PreviewOrder()
         {

@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Windows;
+using System.Windows.Media;
 using DeliveryManagement.Helper;
 using DeliveryManagement.Models;
+using GemBox.Pdf;
 
 namespace DeliveryManagement.Areas.StationStaffs.Controllers
 {
@@ -99,7 +104,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         {
             Package_Order package_Order;
             Package package = db.Packages.Find(id);
-            if (!string.IsNullOrEmpty(package.StatusID))
+            if (package != null)
             {
                 if (package.StatusID.Trim() == Constants.Value_Status_Packed || package.StatusID.Trim() == Constants.Value_Status_Completed)
                 {
@@ -109,23 +114,15 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                 {
                     ViewBag.IsPacked = false;
                 }
+                ViewBag.NumberOfOrder = package.NumberOfOrder;
+
                 package_Order = new Package_Order(id);
             }
             else
             {
+                ViewBag.NumberOfOrder = 0;
                 package_Order = new Package_Order();
             }
-            
-            
-            // TODO: Kiểm tra package status đã Packed hoặc Completed chưa,
-            //              TRUE: thì view khóa không cho thêm order,
-            //                  có nút REOPEN: chuyển lại package sang status "Packing" và load lại Action này (Action sẽ có đoạn kiểm tra và load lại theo case false)
-            //              FALSE: trực tiếp mở view với 1 form gồm thẻ PackageID hidden và input OrderID 
-            //                  ấn submit >> kiểm tra package đã tạo hành trình chưa,
-            //                      nếu chưa sẽ tạo hành trình dựa trên FirstS>Transit (hoặc FirstS>LastS) và cập nhật status "Packing" cho package
-            //                          kiểm tra order tồn tại chưa, chưa thì thêm value vào table Package_Order và cập nhật status packing cho order
-            //                      còn nếu rồi thì báo order đã tồn tại trong package (Error)
-            //      Form có 1 thẻ submit khác dẫn đến action KẾT THÚC (CompletePackage): chuyển package sang status "Packed"
 
             return View(package_Order);
         }
@@ -135,6 +132,8 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Packing([Bind(Include = "PackageID,OrderID,AddTime")] Package_Order package_order)
         {
+            ViewBag.IsPacked = false;
+
             if (ModelState.IsValidField("OrderID"))
             {
                 package_order.AddTime = DateTime.Now;
@@ -184,15 +183,19 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                     }
 
                     Package package = db.Packages.Find(package_order.PackageID);
-                    if(package.SendingStation == Constants.Value_Station_Default || package.ReceivingStation == Constants.Value_Station_Default)
+                    ViewBag.NumberOfOrder = package.NumberOfOrder;
+
+                    if (package.SendingStation == Constants.Value_Station_Default || package.ReceivingStation == Constants.Value_Station_Default)
                     {
                         string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TablePackage + "] "
                                 + "SET " + Constants.DB_Package_Send + " = @Value1 "
                                 + ", " + Constants.DB_Package_Receive + " = @Value2 "
+                                + ", " + Constants.DB_Package_StatusID + " = @Value3 "
                                 + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
                         int rowsAffected = db.Database.ExecuteSqlCommand(sql,
                                             new SqlParameter("@Value1", thisStation),
                                             new SqlParameter("@Value2", nextStation),
+                                            new SqlParameter("@Value3", Constants.Value_Status_Packing),
                                             new SqlParameter("@ValueID", package_order.PackageID));
 
                         package.SendingStation = thisStation;
@@ -236,6 +239,65 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
             return View(package_order);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CompletePackage([Bind(Include = "PackageID")] Package package)
+        {
+            Package check = db.Packages.Find(package.PackageID);
+            if(check == null)
+            {
+                TempData["Error"] = "Lỗi khi truy cập máy chủ! Không thể tìm thấy gói hàng của bạn, hãy thử lại sau.";
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TablePackage + "] "
+                                + "SET " + Constants.DB_Package_StatusID + " = @Value1 "
+                                + " , " + Constants.DB_Package_CompleteTime + " = @Value2 "
+                                + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
+                int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                    new SqlParameter("@Value1", Constants.Value_Status_Packed),
+                                    new SqlParameter("@Value2", DateTime.Now),
+                                    new SqlParameter("@ValueID", package.PackageID));
+            }
+            catch
+            {
+                TempData["Error"] = "Lỗi khi truy cập máy chủ! Chưa thể hoàn thành gói hàng này.";
+            }
+
+            return RedirectToAction("Packing", new { id = package.PackageID.Trim() });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReopenPackage([Bind(Include = "PackageID")] Package package)
+        {
+            Package check = db.Packages.Find(package.PackageID);
+            if (check == null)
+            {
+                TempData["Error"] = "Lỗi khi truy cập máy chủ! Không thể tìm thấy gói hàng của bạn, hãy thử lại sau.";
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TablePackage + "] "
+                                + "SET " + Constants.DB_Package_StatusID + " = @Value1 "
+                                + " , " + Constants.DB_Package_CompleteTime + " = NULL "
+                                + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
+                int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                    new SqlParameter("@Value1", Constants.Value_Status_Packing),
+                                    new SqlParameter("@ValueID", package.PackageID));
+            }
+            catch
+            {
+                TempData["Error"] = "Lỗi khi truy cập máy chủ! Chưa thể hoàn thành gói hàng này.";
+            }
+
+            return RedirectToAction("Packing", new { id = package.PackageID.Trim() });
+        }
+
         public PartialViewResult _ShortPackageDetails(string packageId)
         {
             Package package = db.Packages.Find(packageId);
@@ -247,6 +309,88 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
             {
                 return PartialView(new Package());
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PrintPackageBill(string PackageID)
+        {
+            if (!string.IsNullOrEmpty(PackageID))
+            {
+                Package check = db.Packages.Find(PackageID);
+                if(check == null)
+                {
+                    TempData["Error"] = "Lỗi khi truy cập máy chủ! Không thể tìm thấy gói hàng của bạn, hãy thử lại sau.";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    bool bolGenPdf = false;
+                    string QRpath = MyQRCodeHelper.GenerateAndSaveQRCode(PackageID);
+
+                    string templatePath = Path.Combine(Server.MapPath("~/Setup/"), Constants.Template_Package);
+                    string outputExcelPath = Constants.Path_Excel + PackageID + ".xlsx";
+                    string pdfPath = Server.MapPath(Constants.ServerPath_PDF) + PackageID + ".pdf";
+
+                    if (ExcelHelper.CopyExcelFile(templatePath, outputExcelPath))
+                    {    
+                        bolGenPdf = ExcelHelper.CreatePackageBill(outputExcelPath, check, QRpath, pdfPath);
+                    }
+
+                    if (bolGenPdf)
+                    {
+                        //TODO: print bill, thành công thì RedirectToAction Index
+
+                        //using(PdfDocument pdfDocument = PdfDocument.Load(pdfPath))
+                        //{
+                        //    using(PrintDocument printDocument = new PrintDocument())
+                        //    {
+                        //        printDocument.PrinterSettings.PrintFileName = pdfPath;
+                        //        printDocument.DocumentName = PackageID;
+                        //        printDocument.PrintPage += (sender, e) =>
+                        //        {
+                        //            pdfDocument.Render(pdfDocument.PageCount - 1, e.PageBounds.X, e.PageBounds.Y, true);
+                        //        };
+
+                        //        printDocument.Print();
+                        //    }
+                        //}
+
+
+                        //PdfDocument document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Modify);
+                        //using (var printDocument = new System.Drawing.Printing.PrintDocument())
+                        //{
+                        //    //printDocument.PrinterSettings = printerSetting;
+                        //    printDocument.PrinterSettings.PrintFileName = pdfPath;
+                        //    PdfPage page = document.Pages[0];
+                        //    PdfPage pageNew = new PdfPage();
+                        //    printDocument.PrintPage += (sender, e) =>
+                        //    {
+                        //        //XGraphics graphics = XGraphics.FromPdfPage(document.Pages[0]);
+                        //        XSize size = new XSize(page.Width, page.Height);
+                        //        XGraphics graphics = XGraphics.FromGraphics(e.Graphics, size);
+                        //        XRect rect = new XRect(e.MarginBounds.Left, e.MarginBounds.Top, e.MarginBounds.Width, e.MarginBounds.Height);
+                        //        graphics.DrawImage(XImage.FromFile(pdfPath), rect);
+                        //    };
+                        //    printDocument.Print();
+                        //}
+
+
+                        ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+                        using(var document = PdfDocument.Load(pdfPath))
+                        {
+                            document.Print();
+                        }
+                    }
+                    else
+                    {
+                        //TODO: có lỗi, báo lỗi lên màn hình Packing
+                    }
+                }
+            }
+
+            // else
+            return RedirectToAction("Index");
         }
 
         // GET: StationStaffs/Packages/Edit/5

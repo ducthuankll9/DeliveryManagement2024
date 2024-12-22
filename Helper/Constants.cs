@@ -20,6 +20,7 @@ namespace DeliveryManagement.Helper
         
         public const string Path_PDF500 = @"\Images\500-internal-server-error.pdf";
         public const string Template_Bill = "BillTemplate.xlsx";
+        public const string Template_Package = "PackageTemplate.xlsx";
 
         // DATABASE
         public const string DB_DBNAME = "DeliveryDatabase";
@@ -44,6 +45,8 @@ namespace DeliveryManagement.Helper
             public const string DB_Package_Weight = "TotalWeight";
             public const string DB_Package_Send = "SendingStation";
             public const string DB_Package_Receive = "ReceivingStation";
+            public const string DB_Package_StatusID = "StatusID";
+            public const string DB_Package_CompleteTime = "CompleteTime";
             public const string DB_Package_ID = "PackageID";
 
         public const string DB_TablePackageOrder = "Package_Order";
