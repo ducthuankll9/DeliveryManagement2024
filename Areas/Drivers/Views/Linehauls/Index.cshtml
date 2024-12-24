@@ -1,0 +1,43 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Linehaul>
+
+@{
+    ViewBag.Title = "Danh sách chuyến xe của bạn";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<h2>Danh sách chuyến xe của bạn</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LinehaulID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VehicleNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfOrder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfPackage)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.LinehaulID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VehicleNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfOrder)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfPackage)
+        </td>
+    </tr>
+}
+
+</table>

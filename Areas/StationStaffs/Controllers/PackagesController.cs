@@ -24,12 +24,24 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         // GET: StationStaffs/Packages
         public ActionResult Index()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             var packages = db.Packages.Include(p => p.Status);
             return View(packages.ToList());
         }
 
         public ActionResult Create()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             string userID = Session["StaffID"].ToString();
             // Package package = new Package(DateTime.Now, Constants.Value_Status_Created, 0.1, userID, Constants.Value_Station_Default, Constants.Value_Station_Default);
 
@@ -87,6 +99,12 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         // GET
         public ActionResult Packing(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             Package_Order package_Order;
             Package package = db.Packages.Find(id);
             if (package != null)

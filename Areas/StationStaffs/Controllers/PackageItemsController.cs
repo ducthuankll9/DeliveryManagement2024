@@ -20,6 +20,12 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         // GET: StationStaffs/PackageItems
         public ActionResult Index()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             return View();
         }
 
@@ -34,6 +40,12 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
 
         public ActionResult DeleteItem(string packageId, string orderId)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (!string.IsNullOrEmpty(packageId) && !string.IsNullOrEmpty(orderId))
             {
                 Package_Order package_order = db.Package_Order.FirstOrDefault(p => p.PackageID.Contains(packageId) && p.OrderID.Contains(orderId));

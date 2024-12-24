@@ -18,6 +18,12 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
 
         public ActionResult ReceivingOrder()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             string currentStation = Session["StationID"].ToString();
 
             var orders = db.Orders.Include(o => o.Staff).Include(o => o.Station).Include(o => o.Station1).Include(o => o.Station2).Include(o => o.Station3);
@@ -70,6 +76,12 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         // GET: StationStaffs/OrderProcessing
         public ActionResult Index()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             var orders = db.Orders.Include(o => o.Staff).Include(o => o.Station).Include(o => o.Station1).Include(o => o.Station2).Include(o => o.Station3);
             return View(orders.ToList());
         }

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Linehaul>
+
+@{
+    ViewBag.Title = "Danh sách chuyến xe chờ nhận";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<!-- Message to View -->
+@if (TempData["Error"] != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@using (Html.BeginForm("ReceiveLinehaul", "Linehauls", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <div class="col-md-12">
+                <input type="text" id="LinehaulID" name="LinehaulID" value="" class="form-control" placeholder="Nhập mã chuyến xe vào đây hoặc chọn trong danh sách bên dưới" autofocus />
+            </div>
+            <br />
+            <div class="col-md-12">
+                <input type="submit" value="Xác nhận" class="btn btn-outline-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<hr />
+<h5>Danh sách các chuyến xe chờ phân phối</h5>
+
+<script>
+    function dataToInput(value) {
+        document.getElementById("LinehaulID").value = value;
+    }
+</script>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LinehaulID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VehicleNumber)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td onclick="dataToInput('@item.LinehaulID')">
+                @Html.DisplayFor(modelItem => item.LinehaulID)
+            </td>
+            <td onclick="dataToInput('@item.LinehaulID')">
+                @Html.DisplayFor(modelItem => item.VehicleNumber)
+            </td>
+        </tr>
+    }
+
+</table>
+

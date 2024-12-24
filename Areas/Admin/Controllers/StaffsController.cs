@@ -17,17 +17,25 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Staffs
         public ActionResult Index()
         {
-            //TODO: remove
-            Session["DARKLAYOUT"] = "NO";
-            Session["UserName"] = "UserNameTEST";
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
 
-            var staffs = db.Staffs.Include(s => s.Station);
+            var staffs = db.Staffs.Include(s => s.Station).Where(s => string.IsNullOrEmpty(s.StaffID.Trim()) );
             return View(staffs.ToList());
         }
 
         // GET: Admin/Staffs/Details/5
         public ActionResult Details(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -43,6 +51,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Staffs/Create
         public ActionResult Create()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             Staff newStaff = new Staff();
             String strYear = DateTime.Now.Year.ToString();
 
@@ -114,6 +128,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Staffs/Edit/5
         public ActionResult Edit(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -157,6 +177,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Staffs/Delete/5
         public ActionResult Delete(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -184,7 +210,7 @@ namespace DeliveryManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Đã sảy ra lỗi khi xóa nhân viên " + staff.StaffID + "/" + staff.Fullname + ". Hãy thử lại sau\n" + ex.Message;
+                ViewBag.Error = "Không thể xóa do tài khoản nhân viên này đã có lịch sử hoạt động.";
                 return View(staff);
             }
         }

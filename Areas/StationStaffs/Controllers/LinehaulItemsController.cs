@@ -21,6 +21,12 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         // GET: StationStaffs/LinehaulItems
         public ActionResult Index()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             return View();
         }
 

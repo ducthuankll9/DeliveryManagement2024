@@ -18,12 +18,24 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Stations
         public ActionResult Index()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             return View(db.Stations.ToList());
         }
 
         // GET: Admin/Stations/Details/5
         public ActionResult Details(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +51,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Stations/Create
         public ActionResult Create()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             return View();
         }
 
@@ -71,6 +89,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Stations/Edit/5
         public ActionResult Edit(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -113,6 +137,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Stations/Delete/5
         public ActionResult Delete(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -137,9 +167,9 @@ namespace DeliveryManagement.Areas.Admin.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch
             {
-                ViewBag.Error = "Đã sảy ra lỗi khi xóa " + station.StationID + "/" + station.StationName + ". Hãy thử lại sau\n" + ex.Message;
+                ViewBag.Error = "Không thể xóa đơn vị này do đơn vị đã có lịch sử hoạt động trong hệ thống.";
                 return View(station);
             }
         }

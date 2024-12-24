@@ -17,6 +17,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/ShippingRates
         public ActionResult Index()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             var shippingRates = db.ShippingRates.Include(s => s.Station).Include(s => s.Station1);
             return View(shippingRates.ToList());
         }
@@ -24,6 +30,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/ShippingRates/Create
         public ActionResult Create()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             ViewBag.ReceivingStation = new SelectList(db.Stations, "StationID", "StationName");
             ViewBag.SendingStation = new SelectList(db.Stations, "StationID", "StationName");
             return View();
@@ -58,6 +70,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/ShippingRates/Edit/5
         public ActionResult Edit(string SendingID, string ReceivingID)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(SendingID) || String.IsNullOrEmpty(ReceivingID))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -103,6 +121,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/ShippingRates/Delete/5
         public ActionResult Delete(string SendingID, string ReceivingID)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(SendingID) || String.IsNullOrEmpty(ReceivingID))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -129,7 +153,7 @@ namespace DeliveryManagement.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Đã sảy ra lỗi khi xóa tuyến đường. \n" + ex.ToString();
+                ViewBag.Error = "Không thể xóa do tuyến đường này đã được sử dụng";
                 return View(shippingRate);
             }
         }

@@ -25,10 +25,16 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         // GET: Orders/OrdersManagement
         public ActionResult Index()
         {
-            Session["StationName"] = "Thành phố Hà Giang";
-            Session["StationID"] = "HGHG";
-            Session["StaffName"] = "Lục Đức Thuận";
-            Session["StaffID"] = "NV20230001";
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
+            //Session["StationName"] = "Thành phố Hà Giang";
+            //Session["StationID"] = "HGHG";
+            //Session["StaffName"] = "Lục Đức Thuận";
+            //Session["StaffID"] = "NV20230001";
 
             var orders = db.Orders.Include(o => o.Staff).Include(o => o.Station).Include(o => o.Station1).Include(o => o.Station2).Include(o => o.Station3);
             return View(orders.ToList());
@@ -37,6 +43,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         // GET: Orders/OrdersManagement/Details/5
         public ActionResult Details(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -51,6 +63,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
 
         public ActionResult Create()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             //CREATE new order
             Random random = new Random();
             bool completeAutoGen = false;
@@ -91,6 +109,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         // GET: Orders/OrdersManagement/OrderRegistration/[OrderID]
         public ActionResult OrderRegistration(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             //remove ViewBag first
             ViewBag.Error = null;
             Order order = db.Orders.Find(id);
@@ -120,21 +144,11 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         //public ActionResult OrderRegistration([Bind(Include = "OrderID,SenderName,SenderAddress,SenderPhone,SenderEmail,ReceiverName,ReceiverAddress,ReceiverPhone,FirstStation,Transit,LastStation,CurrentStationID,Creator,OnDelivering")] Order order)
         public ActionResult OrderRegistration([Bind(Include = "OrderID,SenderName,SenderAddress,SenderPhone,SenderEmail,ReceiverName,ReceiverAddress,ReceiverPhone,FirstStation,Transit,LastStation,Fee,Paid,TotalWeight,CurrentStationID,Creator,OrderPrice,OnDelivering")] Order order)
         {
-            //Not binding: Fee,Paid,TotalWeight,OrderPrice,
-            //need to generate as default or read from DB
-            //Order record = db.Orders.FirstOrDefault(o => o.OrderID.Contains(order.OrderID));
-            //if(record == null)
-            //{
-            //    ViewBag.Error = "Sảy ra lỗi kết nối máy chủ! Chưa thể lưu đơn hàng lên máy chủ, hãy nhấn lại nút <<Tạo đơn>>";
-            //    ViewBag.BadError = "BADERROR";
-            //}
-            //else
-            //{
-            //    //order.Fee = record.Fee;
-            //    //order.Paid = record.Paid;
-            //    //order.TotalWeight = record.TotalWeight;
-            //    //order.OrderPrice = record.OrderPrice;
-            //}
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
 
             if (ModelState.IsValid)
             {
@@ -163,6 +177,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
 
         public ActionResult CancelRegister(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             try
             {
                 Order order = db.Orders.Find(id);
@@ -179,6 +199,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         // GET
         public ActionResult Items(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             OrderItem item = db.OrderItems.Where(i => i.OrderID.Contains(id)).OrderByDescending(i => i.ItemID).FirstOrDefault();
             if (item == null)
             {
@@ -229,7 +255,13 @@ namespace DeliveryManagement.Areas.Orders.Controllers
 
         public ActionResult DeleteItems(string orderId, int itemId)
         {
-            if(!string.IsNullOrEmpty(orderId) && itemId>0)
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
+            if (!string.IsNullOrEmpty(orderId) && itemId>0)
             {
                 OrderItem item = db.OrderItems.FirstOrDefault(i => i.OrderID.Contains(orderId) && i.ItemID == itemId);
                 if(item != null)
@@ -311,6 +343,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
 
         public double Caculate(string orderId)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             // Read ini file
             InitFileReader reader = new InitFileReader(Server.MapPath("~/App_Data/SET.ini"));
 
@@ -402,6 +440,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         // GET
         public ActionResult ConfirmPaymentStatus(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             Order order = db.Orders.Find(id);
             if (order == null)
             {
@@ -497,6 +541,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
         // GET: Orders/OrdersManagement/Edit/5
         public ActionResult Edit(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -513,34 +563,14 @@ namespace DeliveryManagement.Areas.Orders.Controllers
             return RedirectToAction("OrderRegistration", new { id = id });
         }
 
-        // GET: Orders/OrdersManagement/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order order = db.Orders.Find(id);
-            if (order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(order);
-        }
-
-        // POST: Orders/OrdersManagement/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            Order order = db.Orders.Find(id);
-            db.Orders.Remove(order);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
         public ActionResult PrintOrder()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             return View();
         }
 
@@ -639,6 +669,12 @@ namespace DeliveryManagement.Areas.Orders.Controllers
 
         public ActionResult PreviewOrder()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             ViewBag.ListPaths = TempData["list"] as List<string>;
             return View();
         }

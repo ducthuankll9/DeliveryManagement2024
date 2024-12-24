@@ -30,6 +30,7 @@ namespace DeliveryManagement.Helper
             public const string DB_Linehaul_NumberOfOrder = "NumberOfOrder";
             public const string DB_Linehaul_VehicleNumber = "VehicleNumber";
             public const string DB_Linehaul_Seal = "Seal";
+            public const string DB_Linehaul_Driver = "Driver";
             public const string DB_Linehaul_ID = "LinehaulID";
 
         public const string DB_TableLinehaulOrder = "Linehaul_Order";

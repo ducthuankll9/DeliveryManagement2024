@@ -430,6 +430,8 @@
     <Content Include="Areas\StationStaffs\Views\LinehaulItems\_ListOrdersInLinehaul.cshtml" />
     <Content Include="Areas\StationStaffs\Views\LinehaulItems\_ListPackagesInLinehaul.cshtml" />
     <Content Include="Areas\StationStaffs\Views\Linehauls\CompleteLinehaul.cshtml" />
+    <Content Include="Areas\Drivers\Views\Linehauls\ReceiveLinehaul.cshtml" />
+    <Content Include="Areas\Drivers\Views\Linehauls\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -459,12 +461,12 @@
     <Content Include="Setup\SET.ini" />
     <Content Include="Setup\BillTemplate.xlsx" />
     <Content Include="Setup\PackageTemplate.xlsx" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Common\Lib\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Drivers\Data\" />
-    <Folder Include="Areas\Drivers\Views\Linehauls\" />
     <Folder Include="Areas\Drivers\Views\Shared\" />
     <Folder Include="Areas\Orders\Data\" />
     <Folder Include="Areas\Orders\Views\Demo\" />

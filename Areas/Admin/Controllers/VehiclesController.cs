@@ -18,12 +18,24 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Vehicles
         public ActionResult Index()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             return View(db.Vehicles.ToList());
         }
 
         // GET: Admin/Vehicles/Create
         public ActionResult Create()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             return View();
         }
 
@@ -54,6 +66,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Vehicles/Edit/5
         public ActionResult Edit(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -93,6 +111,12 @@ namespace DeliveryManagement.Areas.Admin.Controllers
         // GET: Admin/Vehicles/Delete/5
         public ActionResult Delete(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsAdmin"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             if (String.IsNullOrEmpty(id))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -119,7 +143,7 @@ namespace DeliveryManagement.Areas.Admin.Controllers
             }
             catch
             {
-                ViewBag.Error = "Đã sảy ra lỗi khi xóa phương tiện có BKS " + vehicle.VehicleNumber + ". \nPhương tiện này đã được lưu trữ trong lịch sử hoạt động nên không thể xóa";
+                ViewBag.Error = "Phương tiện này đã được lưu trữ trong lịch sử hoạt động nên không thể xóa";
                 return View(vehicle);
             }
         }

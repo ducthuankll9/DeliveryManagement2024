@@ -19,31 +19,25 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         // GET: StationStaffs/Linehauls
         public ActionResult Index()
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             var linehauls = db.Linehauls.Include(l => l.Staff).Include(l => l.Staff1).Include(l => l.Vehicle);
             return View(linehauls.ToList());
-        }
-
-        // GET: StationStaffs/Linehauls/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Linehaul linehaul = db.Linehauls.Find(id);
-            if (linehaul == null)
-            {
-                return HttpNotFound();
-            }
-            return View(linehaul);
         }
 
         // GET: StationStaffs/Linehauls/Create
         public ActionResult Create()
         {
-            //ViewBag.Driver = new SelectList(db.Staffs, "StaffID", "Password");
-            //ViewBag.Operator = new SelectList(db.Staffs, "StaffID", "Password");
-            //ViewBag.VehicleNumber = new SelectList(db.Vehicles, "VehicleNumber", "Type");
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             string userID = Session["StaffID"].ToString();
             string newID;
 
@@ -92,6 +86,12 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         // GET
         public ActionResult LinehaulInfo(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             Linehaul_Package linehaul_package;
             Linehaul linehaul = db.Linehauls.Find(id);
             if(linehaul != null)
@@ -268,6 +268,12 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
         //GET
         public ActionResult CompleteLinehaul(string id)
         {
+            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
             Linehaul linehaul = db.Linehauls.Find(id);
             if (linehaul == null)
             {
