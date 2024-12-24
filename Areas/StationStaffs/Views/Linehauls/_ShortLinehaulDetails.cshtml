@@ -1,0 +1,14 @@
+﻿@model DeliveryManagement.Models.Linehaul
+
+<div class="card" style="padding:1%;">
+    <div class="row">
+        <div class="col-lg-4">@Html.DisplayNameFor(model => model.NumberOfOrder): <b>@Html.DisplayFor(model => model.NumberOfOrder)</b></div>
+        <div class="col-lg-4">@Html.DisplayNameFor(model => model.Operator): <b>@Html.DisplayFor(model => model.Operator)</b></div>
+        <div class="col-lg-4">@Html.DisplayNameFor(model => model.Seal): <b>@Html.DisplayFor(model => model.Seal)</b></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">@Html.DisplayNameFor(model => model.NumberOfPackage): <b>@Html.DisplayFor(model => model.NumberOfPackage)</b></div>
+        <div class="col-lg-4">@Html.DisplayNameFor(model => model.Driver): <b>@Html.DisplayFor(model => model.Driver)</b></div>
+        <div class="col-lg-4" title="@Model.Vehicle.Type">@Html.DisplayNameFor(model => model.VehicleNumber): <b>@Html.DisplayFor(model => model.VehicleNumber)</b></div>
+    </div>
+</div>

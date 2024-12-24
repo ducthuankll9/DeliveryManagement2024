@@ -1,0 +1,123 @@
+﻿@model DeliveryManagement.Models.Linehaul_Package
+
+@{
+    ViewBag.Title = "Chuyến xe " + Model.LinehaulID;
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+
+    int numOrder, numPackage;
+    if (ViewBag.NumberOfOrder == null) { numOrder = 0; } else { numOrder = ViewBag.NumberOfOrder; }
+    if (ViewBag.NumberOfPackage == null) { numPackage = 0; } else { numPackage = ViewBag.NumberOfPackage; }
+}
+
+<!-- Message to View -->
+@if (TempData["Error"] != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <audio id="NotificationAudio" src="~/Areas/StationStaffs/Common/Audio/e-oh.mp3" autostart="false" preload="auto"></audio>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="form-group alert alert-success alert-dismissible fade show alertFront" role="alert">
+        <i class="far fa-check-circle"></i>
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <audio id="NotificationAudio" src="~/Areas/StationStaffs/Common/Audio/succesful.mp3" autostart="false" preload="auto"></audio>
+}
+@if (TempData["Warning"] != null)
+{
+    <div class="form-group alert alert-warning alert-dismissible fade show alertFront" role="alert">
+        <i class="far fa-check-circle"></i>
+        @TempData["Warning"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<script>
+    window.onload = function () {
+        var audioElement = document.getElementById("NotificationAudio");
+        if (audioElement != null) {
+            audioElement.play();
+        }
+    }
+
+    function updateHiddenOd(value) {
+        document.getElementById("OrderID").value = value;
+    }
+</script>
+
+<h2>Chuyến xe @Model.LinehaulID</h2>
+
+@{
+    Html.RenderAction("_ShortLinehaulDetails", "Linehauls", new { linehaulId = Model.LinehaulID });
+}
+
+<br />
+@if (!string.IsNullOrEmpty(ViewBag.Seal))
+{
+    using (Html.BeginForm("ReopenLinehaul", "Linehauls", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.HiddenFor(model => model.LinehaulID)
+            <div class="row">
+                <div class="col-md-6">
+                    <!--<input type="submit" formaction="@Url.Action("PreviewLinehaul", "Linehauls")" value="QR &#128269; " class="btn btn-outline-warning" />-->
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Mở lại" class="btn btn-warning float-end" />
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    using (Html.BeginForm("LinehaulInfo", "Linehauls", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.LinehaulID)
+            @Html.HiddenFor(model => model.AddTime)
+            @Html.ValidationMessageFor(model => model.AddTime, "", new { @class = "text-danger" })
+
+            <input type="hidden" id="OrderID" name="OrderID" value="@Model.PackageID " />
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.PackageID, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập mã gói hàng hoặc đơn hàng", @autofocus = "autofocus", @onfocus = "select()", @oninput = "updateHiddenOd(this.value)" } })
+                        @Html.ValidationMessageFor(model => model.PackageID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input type="submit" value="Thêm &#10133; " class="btn btn-outline-success" />
+                            </div>
+                            <div class="col-md-4">
+                                @if (numOrder > 0 || numPackage > 0)
+                                {
+                                    <a href="@Url.Action("CompleteLinehaul", "Linehauls", new { id = Model.LinehaulID.Trim() })" class="btn btn-warning float-end">Hoàn thành</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<hr />
+<table class="table">
+    @{
+        Html.RenderAction("_ListOrdersInLinehaul", "LinehaulItems", new { linehaulId = Model.LinehaulID, isDetails = !string.IsNullOrEmpty(ViewBag.Seal) });
+    }
+
+    @{
+        Html.RenderAction("_ListPackagesInLinehaul", "LinehaulItems", new { linehaulId = Model.LinehaulID, isDetails = !string.IsNullOrEmpty(ViewBag.Seal) });
+    }
+</table>

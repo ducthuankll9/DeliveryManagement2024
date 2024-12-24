@@ -26,6 +26,12 @@ namespace DeliveryManagement.Helper
         public const string DB_DBNAME = "DeliveryDatabase";
         
         public const string DB_TableLinehaul = "Linehaul";
+            public const string DB_Linehaul_NumberOfPackage = "NumberOfPackage";
+            public const string DB_Linehaul_NumberOfOrder = "NumberOfOrder";
+            public const string DB_Linehaul_VehicleNumber = "VehicleNumber";
+            public const string DB_Linehaul_Seal = "Seal";
+            public const string DB_Linehaul_ID = "LinehaulID";
+
         public const string DB_TableLinehaulOrder = "Linehaul_Order";
         public const string DB_TableLinehaulPackage = "Linehaul_Package";
         public const string DB_TableOrder = "Order";
@@ -52,6 +58,7 @@ namespace DeliveryManagement.Helper
         public const string DB_TablePackageOrder = "Package_Order";
         public const string DB_TableShippingRates = "ShippingRates";
         public const string DB_TableStaff = "Staff";
+            public const string Value_Staff_Default = "          ";
         public const string DB_TableStation = "Station";
             public const string Value_Station_Default = "    ";
 

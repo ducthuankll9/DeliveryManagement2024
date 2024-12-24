@@ -28,22 +28,6 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
             return View(packages.ToList());
         }
 
-        // GET: StationStaffs/Packages/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Package package = db.Packages.Find(id);
-            if (package == null)
-            {
-                return HttpNotFound();
-            }
-            return View(package);
-        }
-
-        // GET: StationStaffs/Packages/Create
         public ActionResult Create()
         {
             string userID = Session["StaffID"].ToString();
@@ -100,6 +84,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
             return RedirectToAction("Packing", new { id = newID });
         }
 
+        // GET
         public ActionResult Packing(string id)
         {
             Package_Order package_Order;
@@ -390,71 +375,6 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
             }
 
             // else
-            return RedirectToAction("Index");
-        }
-
-        // GET: StationStaffs/Packages/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Package package = db.Packages.Find(id);
-            if (package == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.Packer = new SelectList(db.Staffs, "StaffID", "Password", package.Packer);
-            ViewBag.ReceivingStation = new SelectList(db.Stations, "StationID", "StationName", package.ReceivingStation);
-            ViewBag.SendingStation = new SelectList(db.Stations, "StationID", "StationName", package.SendingStation);
-            ViewBag.StatusID = new SelectList(db.Status, "StatusID", "StatusName", package.StatusID);
-            return View(package);
-        }
-
-        // POST: StationStaffs/Packages/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "PackageID,CreateTime,CompleteTime,NumberOfOrder,StatusID,TotalWeight,Packer,SendingStation,ReceivingStation")] Package package)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(package).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.Packer = new SelectList(db.Staffs, "StaffID", "Password", package.Packer);
-            ViewBag.ReceivingStation = new SelectList(db.Stations, "StationID", "StationName", package.ReceivingStation);
-            ViewBag.SendingStation = new SelectList(db.Stations, "StationID", "StationName", package.SendingStation);
-            ViewBag.StatusID = new SelectList(db.Status, "StatusID", "StatusName", package.StatusID);
-            return View(package);
-        }
-
-        // GET: StationStaffs/Packages/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Package package = db.Packages.Find(id);
-            if (package == null)
-            {
-                return HttpNotFound();
-            }
-            return View(package);
-        }
-
-        // POST: StationStaffs/Packages/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            Package package = db.Packages.Find(id);
-            db.Packages.Remove(package);
-            db.SaveChanges();
             return RedirectToAction("Index");
         }
 

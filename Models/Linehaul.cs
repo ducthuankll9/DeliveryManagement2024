@@ -21,6 +21,9 @@ namespace DeliveryManagement.Models
         {
             this.LINEHAUL_ORDER = new HashSet<LINEHAUL_ORDER>();
             this.Linehaul_Package = new HashSet<Linehaul_Package>();
+
+            this.Staff = new Staff();
+            this.Staff1 = new Staff();
         }
 
         [Key]
@@ -39,7 +42,7 @@ namespace DeliveryManagement.Models
         [Range(0, int.MaxValue, ErrorMessage = "Số lượng phải lớn hơn 0")]
         public int NumberOfPackage { get; set; }
 
-        [DisplayName("Số đơn")]
+        [DisplayName("Số đơn lẻ")]
         [Required(ErrorMessage = "Mục này không được để trống!")]
         [Range(0, int.MaxValue, ErrorMessage = "Số lượng phải lớn hơn 0")]
         public int NumberOfOrder { get; set; }

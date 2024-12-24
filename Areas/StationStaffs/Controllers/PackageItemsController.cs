@@ -13,9 +13,15 @@ using DeliveryManagement.Models;
 
 namespace DeliveryManagement.Areas.StationStaffs.Controllers
 {
-    public class OrderInPackageController : Controller
+    public class PackageItemsController : Controller
     {
         private DeliveryDatabaseEntities db = new DeliveryDatabaseEntities();
+
+        // GET: StationStaffs/PackageItems
+        public ActionResult Index()
+        {
+            return View();
+        }
 
         public PartialViewResult _ListOrderInPackage(string packageId, bool isDetails)
         {
@@ -28,10 +34,10 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
 
         public ActionResult DeleteItem(string packageId, string orderId)
         {
-            if(!string.IsNullOrEmpty(packageId) && !string.IsNullOrEmpty(orderId))
+            if (!string.IsNullOrEmpty(packageId) && !string.IsNullOrEmpty(orderId))
             {
                 Package_Order package_order = db.Package_Order.FirstOrDefault(p => p.PackageID.Contains(packageId) && p.OrderID.Contains(orderId));
-                if(package_order != null)
+                if (package_order != null)
                 {
                     try
                     {
@@ -83,64 +89,6 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
             }
 
             return RedirectToAction("Packing", "Packages", new { id = packageId });
-        }
-
-        // GET: StationStaffs/OrderInPackage
-        public ActionResult Index()
-        {
-            var package_Order = db.Package_Order.Include(p => p.Order).Include(p => p.Package);
-            return View(package_Order.ToList());
-        }
-
-        // GET: StationStaffs/OrderInPackage/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Package_Order package_Order = db.Package_Order.Find(id);
-            if (package_Order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(package_Order);
-        }
-
-
-        // GET: StationStaffs/OrderInPackage/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Package_Order package_Order = db.Package_Order.Find(id);
-            if (package_Order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(package_Order);
-        }
-
-        // POST: StationStaffs/OrderInPackage/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
-        {
-            Package_Order package_Order = db.Package_Order.Find(id);
-            db.Package_Order.Remove(package_Order);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

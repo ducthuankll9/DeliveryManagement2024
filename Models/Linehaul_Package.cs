@@ -16,6 +16,12 @@ namespace DeliveryManagement.Models
 
     public partial class Linehaul_Package
     {
+        public Linehaul_Package() { }
+        public Linehaul_Package(string id) 
+        {
+            this.LinehaulID = id;
+        }
+
         [Key]
         [DisplayName("Mã chuyến xe")]
         [Required(ErrorMessage = "Mục này không được để trống!")]

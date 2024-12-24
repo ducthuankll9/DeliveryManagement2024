@@ -209,14 +209,17 @@
     <Compile Include="Areas\Admin\Controllers\StaffsController.cs" />
     <Compile Include="Areas\Admin\Controllers\StationsController.cs" />
     <Compile Include="Areas\Admin\Controllers\VehiclesController.cs" />
+    <Compile Include="Areas\Drivers\Controllers\LinehaulsController.cs" />
     <Compile Include="Areas\Drivers\DriversAreaRegistration.cs" />
     <Compile Include="Areas\Orders\Controllers\DemoController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderItemsController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrdersManagementController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderStatusHistoryController.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
-    <Compile Include="Areas\StationStaffs\Controllers\OrderInPackageController.cs" />
+    <Compile Include="Areas\StationStaffs\Controllers\LinehaulItemsController.cs" />
+    <Compile Include="Areas\StationStaffs\Controllers\LinehaulsController.cs" />
     <Compile Include="Areas\StationStaffs\Controllers\OrderProcessingController.cs" />
+    <Compile Include="Areas\StationStaffs\Controllers\PackageItemsController.cs" />
     <Compile Include="Areas\StationStaffs\Controllers\PackagesController.cs" />
     <Compile Include="Areas\StationStaffs\StationStaffsAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -407,10 +410,6 @@
     <Content Include="Areas\Orders\Views\OrdersManagement\ConfirmPaymentStatus.cshtml" />
     <Content Include="Areas\StationStaffs\Views\OrderProcessing\ReceivingOrder.cshtml" />
     <Content Include="App_Data\SET.ini" />
-    <Content Include="Areas\StationStaffs\Views\Packages\Create.cshtml" />
-    <Content Include="Areas\StationStaffs\Views\Packages\Delete.cshtml" />
-    <Content Include="Areas\StationStaffs\Views\Packages\Details.cshtml" />
-    <Content Include="Areas\StationStaffs\Views\Packages\Edit.cshtml" />
     <Content Include="Areas\StationStaffs\Views\Packages\Index.cshtml" />
     <EntityDeploy Include="Models\DeliveryMngDBModels.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -420,11 +419,17 @@
       <DependentUpon>DeliveryMngDBModels.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\StationStaffs\Views\Packages\Packing.cshtml" />
-    <Content Include="Areas\StationStaffs\Views\OrderInPackage\_ListOrderInPackage.cshtml" />
     <Content Include="Areas\StationStaffs\Views\Packages\_ShortPackageDetails.cshtml" />
     <Content Include="Areas\Orders\Views\OrdersManagement\PrintOrder.cshtml" />
     <Content Include="Areas\Orders\Views\OrdersManagement\PreviewOrder.cshtml" />
     <Content Include="Images\500-internal-server-error.pdf" />
+    <Content Include="Areas\StationStaffs\Views\Linehauls\Index.cshtml" />
+    <Content Include="Areas\StationStaffs\Views\Linehauls\LinehaulInfo.cshtml" />
+    <Content Include="Areas\StationStaffs\Views\Linehauls\_ShortLinehaulDetails.cshtml" />
+    <Content Include="Areas\StationStaffs\Views\PackageItems\_ListOrderInPackage.cshtml" />
+    <Content Include="Areas\StationStaffs\Views\LinehaulItems\_ListOrdersInLinehaul.cshtml" />
+    <Content Include="Areas\StationStaffs\Views\LinehaulItems\_ListPackagesInLinehaul.cshtml" />
+    <Content Include="Areas\StationStaffs\Views\Linehauls\CompleteLinehaul.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -458,8 +463,8 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Common\Lib\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Drivers\Controllers\" />
     <Folder Include="Areas\Drivers\Data\" />
+    <Folder Include="Areas\Drivers\Views\Linehauls\" />
     <Folder Include="Areas\Drivers\Views\Shared\" />
     <Folder Include="Areas\Orders\Data\" />
     <Folder Include="Areas\Orders\Views\Demo\" />

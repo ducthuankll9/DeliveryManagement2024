@@ -1,0 +1,51 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Linehaul>
+
+@{
+    ViewBag.Title = "Chuyến xe";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<h2>Chuyến xe</h2>
+
+<a href="@Url.Action("Create")" class="btn btn-outline-secondary">Tạo mới &#10133;</a>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LinehaulID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VehicleNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Driver)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfOrder)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumberOfPackage)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td style="color:blue;">
+            @Html.ActionLink(item.LinehaulID, "LinehaulInfo", new { id = item.LinehaulID.Trim() })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VehicleNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Staff1.Fullname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfOrder)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumberOfPackage)
+        </td>
+    </tr>
+}
+
+</table>

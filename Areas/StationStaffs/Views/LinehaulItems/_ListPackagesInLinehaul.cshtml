@@ -1,0 +1,33 @@
+﻿@model IEnumerable<DeliveryManagement.Models.Linehaul_Package>
+
+<tr>
+    <th colspan="4" style="font-style: italic; color: grey;">Danh sách gói hàng</th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td style="color:blue;">
+            @Html.ActionLink(item.PackageID, "Packing", "Packages", new { id = item.PackageID.Trim(), area = "StationStaffs" }, new { target = "_blank" })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Package.Station.StationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Package.TotalWeight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddTime)
+        </td>
+        <td>
+            @if (!ViewBag.IsDetails)
+            {
+                <button type="button" class="btn">
+                    <a href="@Url.Action("DeleteItem","LinehaulItems", new { linehaulId = item.LinehaulID, itemId = item.PackageID })" title="Xóa" style="color:red;">
+                        <i class="fas fa-backspace"></i>
+                    </a>
+                </button>
+            }
+        </td>
+    </tr>
+}

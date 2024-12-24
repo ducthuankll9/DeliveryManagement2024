@@ -1,0 +1,44 @@
+﻿@model IEnumerable<DeliveryManagement.Models.LINEHAUL_ORDER>
+
+<tr>
+    <th colspan="4" style="font-style:italic; color:grey;">Danh sách đơn hàng</th>
+</tr>
+<tr>
+    <th>ID</th>
+    <th>Trạm cuối</th>
+    <th>
+        @Html.DisplayNameFor(model => model.Order.TotalWeight)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.AddTime)
+    </th>
+    <th></th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td style="color:blue;">
+            @Html.ActionLink(item.OrderID, "Details", "OrdersManagement", new { id = item.OrderID.Trim(), area = "Orders" }, new { target = "_blank" })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order.Station2.StationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Order.TotalWeight)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddTime)
+        </td>
+        <td>
+            @if (!ViewBag.IsDetails)
+            {
+                <button type="button" class="btn">
+                    <a href="@Url.Action("DeleteItem","LinehaulItems", new { linehaulId = item.LinehaulID, itemId = item.OrderID })" title="Xóa" style="color:red;">
+                        <i class="fas fa-backspace"></i>
+                    </a>
+                </button>
+            }
+        </td>
+    </tr>
+}

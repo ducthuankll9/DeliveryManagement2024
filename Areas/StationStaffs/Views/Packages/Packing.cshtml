@@ -107,5 +107,5 @@ else
 
 <hr />
 @{
-    Html.RenderAction("_ListOrderInPackage", "OrderInPackage", new { packageId = Model.PackageID, isDetails = (bool)ViewBag.IsPacked });
+    Html.RenderAction("_ListOrderInPackage", "PackageItems", new { packageId = Model.PackageID, isDetails = (bool)ViewBag.IsPacked });
 }

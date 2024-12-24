@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title> @ViewBag.Title - Admin</title>
+    <title> @ViewBag.Title</title>
 
     <!-- Favicon -->
     <link href="~/Images/package.ico" rel="icon">
@@ -70,11 +70,11 @@
                                    href="@Url.Action("Create", "OrdersManagement", new { area = "Orders" })">
                                     Tạo đơn
                                 </a>
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
+                                <a class="nav-link @((ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "Details") && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
                                    href="@Url.Action("Index", "OrdersManagement", new { area = "Orders" })">
                                     Danh sách đơn
                                 </a>
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "PrintOrder" && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
+                                <a class="nav-link @((ViewContext.RouteData.Values["Action"].ToString() == "PrintOrder" || ViewContext.RouteData.Values["Action"].ToString() == "PreviewOrder") && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
                                    href="@Url.Action("PrintOrder", "OrdersManagement", new { area = "Orders" })">
                                     In đơn
                                 </a>
@@ -104,8 +104,8 @@
                                    href="@Url.Action("Index", "Packages", new { area = "StationStaffs" })">
                                     Gói hàng
                                 </a>
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Linehauls" ? "active" : "")" 
-                                   href="#">
+                                <a class="nav-link @((ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString().Contains("Linehaul")) && ViewContext.RouteData.Values["Controller"].ToString() == "Linehauls" ? "active" : "")" 
+                                   href="@Url.Action("Index", "Linehauls", new { area = "StationStaffs" })">
                                     Chuyến xe
                                 </a>
                             </nav>

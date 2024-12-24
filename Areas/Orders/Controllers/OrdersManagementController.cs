@@ -109,9 +109,9 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                 order = new Order();
             }
 
-            ViewBag.FirstStation = new SelectList(db.Stations.Where(s => s.IsStation), "StationID", "StationName");
-            ViewBag.LastStation = new SelectList(db.Stations.Where(s => s.IsStation), "StationID", "StationName");
-            ViewBag.Transit = new SelectList(db.Stations.Where(s => s.IsStation), "StationID", "StationName");
+            ViewBag.FirstStation = new SelectList(db.Stations.Where(s => s.IsStation), "StationID", "StationName", order.FirstStation);
+            ViewBag.LastStation = new SelectList(db.Stations.Where(s => s.IsStation), "StationID", "StationName", order.LastStation);
+            ViewBag.Transit = new SelectList(db.Stations.Where(s => s.IsStation), "StationID", "StationName", order.Transit);
             return View(order);
         }
 
