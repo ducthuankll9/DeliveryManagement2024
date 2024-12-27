@@ -91,6 +91,24 @@
       <HintPath>packages\MicrosoftOfficeCore.15.0.0\lib\net35\Office.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="PdfSharp, Version=6.1.1.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>packages\PDFsharp.6.1.1\lib\netstandard2.0\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=6.1.1.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>packages\PDFsharp.6.1.1\lib\netstandard2.0\PdfSharp.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Quality, Version=6.1.1.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>packages\PDFsharp.6.1.1\lib\netstandard2.0\PdfSharp.Quality.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Snippets, Version=6.1.1.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>packages\PDFsharp.6.1.1\lib\netstandard2.0\PdfSharp.Snippets.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.System, Version=6.1.1.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>packages\PDFsharp.6.1.1\lib\netstandard2.0\PdfSharp.System.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.WPFonts, Version=6.1.1.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>packages\PDFsharp.6.1.1\lib\netstandard2.0\PdfSharp.WPFonts.dll</HintPath>
+    </Reference>
     <Reference Include="Pkcs11Interop, Version=5.1.1.0, Culture=neutral, PublicKeyToken=c10e9c2d8c006d2a, processorArchitecture=MSIL">
       <HintPath>packages\Pkcs11Interop.5.1.1\lib\net45\Pkcs11Interop.dll</HintPath>
     </Reference>
@@ -211,7 +229,6 @@
     <Compile Include="Areas\Admin\Controllers\VehiclesController.cs" />
     <Compile Include="Areas\Drivers\Controllers\LinehaulsController.cs" />
     <Compile Include="Areas\Drivers\DriversAreaRegistration.cs" />
-    <Compile Include="Areas\Orders\Controllers\DemoController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderItemsController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrdersManagementController.cs" />
     <Compile Include="Areas\Orders\Controllers\OrderStatusHistoryController.cs" />
@@ -399,7 +416,6 @@
     <Content Include="Areas\Admin\Views\ShippingRates\Delete.cshtml" />
     <Content Include="Areas\Admin\Views\ShippingRates\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ShippingRates\Index.cshtml" />
-    <Content Include="Areas\Orders\Views\OrdersManagement\Delete.cshtml" />
     <Content Include="Areas\Orders\Views\OrdersManagement\Details.cshtml" />
     <Content Include="Areas\Orders\Views\OrdersManagement\Index.cshtml" />
     <Content Include="Areas\StationStaffs\Views\Shared\_CommonLayout.cshtml" />
@@ -432,6 +448,9 @@
     <Content Include="Areas\StationStaffs\Views\Linehauls\CompleteLinehaul.cshtml" />
     <Content Include="Areas\Drivers\Views\Linehauls\ReceiveLinehaul.cshtml" />
     <Content Include="Areas\Drivers\Views\Linehauls\Index.cshtml" />
+    <Content Include="Areas\Drivers\Views\Shared\_DriverLayout.cshtml" />
+    <Content Include="Areas\Orders\Views\OrdersManagement\FinishOrders.cshtml" />
+    <Content Include="Areas\Orders\Views\OrdersManagement\FinishingOrders.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -467,9 +486,7 @@
     <Folder Include="Areas\Admin\Common\Lib\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Drivers\Data\" />
-    <Folder Include="Areas\Drivers\Views\Shared\" />
     <Folder Include="Areas\Orders\Data\" />
-    <Folder Include="Areas\Orders\Views\Demo\" />
     <Folder Include="Areas\Orders\Views\Shared\" />
     <Folder Include="Areas\StationStaffs\Data\" />
     <Folder Include="Images\User\" />

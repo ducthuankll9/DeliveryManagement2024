@@ -22,8 +22,15 @@ namespace DeliveryManagement.Areas.Orders.Controllers
     {
         private DeliveryDatabaseEntities db = new DeliveryDatabaseEntities();
 
+        private void ResetFilter()
+        {
+            Session["Phone"] = "";
+            Session["OnDelivering"] = "";
+            Session["SearchID"] = "";
+        }
+
         // GET: Orders/OrdersManagement
-        public ActionResult Index()
+        public ActionResult Index(string IDlike, string OnDelivering, string Phone)
         {
             if (Session["StaffID"] == null || !(bool)Session["IsStation"])
             {
@@ -31,12 +38,57 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
 
-            //Session["StationName"] = "Thành phố Hà Giang";
-            //Session["StationID"] = "HGHG";
-            //Session["StaffName"] = "Lục Đức Thuận";
-            //Session["StaffID"] = "NV20230001";
-
             var orders = db.Orders.Include(o => o.Staff).Include(o => o.Station).Include(o => o.Station1).Include(o => o.Station2).Include(o => o.Station3);
+            
+            //// get current filter
+            //string currentSearch = "", currentDelivering = "", currentPhone = "";
+            //if(Session["SearchID"] != null)
+            //{
+            //    currentSearch = Session["SearchID"].ToString();
+            //}
+            //if (Session["OnDelivering"] != null)
+            //{
+            //    currentDelivering = Session["OnDelivering"].ToString();
+            //}
+            //if (Session["Phone"] != null)
+            //{
+            //    currentPhone = Session["Phone"].ToString();
+            //}
+
+            // set new filter
+            try
+            {
+                if (!string.IsNullOrEmpty(IDlike))
+                {
+                    ViewBag.SearchID = IDlike;
+                    orders = orders.Where(o => o.OrderID.Contains(IDlike));
+                }
+                else if (!string.IsNullOrEmpty(Phone))
+                {
+                    ViewBag.Phone = Phone;
+                    orders = orders.Where(o => o.SenderPhone.Contains(Phone) || o.ReceiverPhone.Contains(Phone));
+                }
+                else
+                {
+                    string stationID = Session["StationID"] + "";
+                    orders = orders.Where(o => o.CurrentStationID.Contains(stationID));
+                }
+
+                if (!string.IsNullOrEmpty(OnDelivering))
+                {
+                    ViewBag.OnDelivering = OnDelivering;
+                    if (OnDelivering == "0")
+                    {
+                        orders = orders.Where(o => o.OnDelivering == false);
+                    }
+                    else if (OnDelivering == "1")
+                    {
+                        orders = orders.Where(o => o.OnDelivering == true);
+                    }
+                }
+            }
+            catch { }
+
             return View(orders.ToList());
         }
 
@@ -236,7 +288,7 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                     string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableOrder + "] "
                         + "SET " + Constants.DB_Order_Weight + " = @Value1 "
                         + "WHERE " + Constants.DB_Order_ID + " = @ValueID";
-                    int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                    int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                         new SqlParameter("@Value1", newWeight),
                                         new SqlParameter("@ValueID", orderItem.OrderID));
 
@@ -277,7 +329,7 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                         string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableOrder + "] "
                         + "SET " + Constants.DB_Order_Weight + " = @Value1 "
                         + "WHERE " + Constants.DB_Order_ID + " = @ValueID";
-                        int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                        int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                             new SqlParameter("@Value1", newWeight),
                                             new SqlParameter("@ValueID", item.OrderID));
 
@@ -318,7 +370,7 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                 string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableOrder + "] "
                         + "SET " + Constants.DB_Order_Price + " = @Value1 "
                         + "WHERE " + Constants.DB_Order_ID + " = @ValueID";
-                int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                 new SqlParameter("@Value1", order.OrderPrice),
                                                 new SqlParameter("@ValueID", order.OrderID));
             }
@@ -343,12 +395,6 @@ namespace DeliveryManagement.Areas.Orders.Controllers
 
         public double Caculate(string orderId)
         {
-            if (Session["StaffID"] == null || !(bool)Session["IsStation"])
-            {
-                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
-                return RedirectToAction("Login", "Home", new { area = "" });
-            }
-
             // Read ini file
             InitFileReader reader = new InitFileReader(Server.MapPath("~/App_Data/SET.ini"));
 
@@ -486,7 +532,7 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                         + " , " + Constants.DB_Order_Paid + " = @Value2 "
                         + " , " + Constants.DB_Order_OnDelivering + " = @Value3 "
                         + "WHERE " + Constants.DB_Order_ID + " = @ValueID";
-                    int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                    int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                     new SqlParameter("@Value1", order.Fee),
                                                     new SqlParameter("@Value2", order.Paid),
                                                     new SqlParameter("@Value3", true),
@@ -495,10 +541,10 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                     //db.Entry(order).State = EntityState.Modified;
                     //db.SaveChanges();
 
+                    // Add History
                     Order_Status checkStt = db.Order_Status.FirstOrDefault(s => s.OrderID.Contains(order.OrderID) && s.StatusID.Contains(Constants.Value_Status_Created));
                     if (checkStt == null)
                     {
-                        // TODO: fix login
                         string currentStationId = Session["StationID"] + "";
 
                         Order_Status status = new Order_Status(order.OrderID, Constants.Value_Status_Created, currentStationId, System.DateTime.Now);
@@ -510,6 +556,26 @@ namespace DeliveryManagement.Areas.Orders.Controllers
                         catch 
                         {
                             TempData["Error"] = "Chưa thể cập nhật lịch sử trạng thái \"Khởi tạo\" của đơn hàng";
+                        }
+                    }
+
+                    if (order.Paid)
+                    {
+                        Order_Status checkStt2 = db.Order_Status.FirstOrDefault(s => s.OrderID.Contains(order.OrderID) && s.StatusID.Contains(Constants.Value_Status_Paid));
+                        if(checkStt2 == null)
+                        {
+                            string currentStationId = Session["StationID"] + "";
+
+                            Order_Status status = new Order_Status(order.OrderID, Constants.Value_Status_Paid, currentStationId, System.DateTime.Now);
+                            try
+                            {
+                                db.Order_Status.Add(status);
+                                db.SaveChanges();
+                            }
+                            catch
+                            {
+                                TempData["Error"] = "Chưa thể cập nhật lịch sử trạng thái \"Đã thanh toán\" của đơn hàng";
+                            }
                         }
                     }
 
@@ -677,6 +743,106 @@ namespace DeliveryManagement.Areas.Orders.Controllers
 
             ViewBag.ListPaths = TempData["list"] as List<string>;
             return View();
+        }
+
+        //GET
+        public ActionResult FinishingOrders()
+        {
+            if (Session["StaffID"] == null || !((bool)Session["IsStation"] || (bool)Session["IsDriver"]))
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult FinishingOrders(string OrderID)
+        {
+            Order order = db.Orders.Find(OrderID);
+            if(order == null)
+            {
+                TempData["Error"] = "Mã đơn hàng [" + OrderID + "] không tồn tại!";
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("FinishOrders", new { id = OrderID });
+            }
+        }
+
+        //GET
+        public ActionResult FinishOrders(string id)
+        {
+            if (Session["StaffID"] == null || !((bool)Session["IsStation"] || (bool)Session["IsDriver"]))
+            {
+                TempData["Error"] = "Đăng nhập không hợp lệ, hãy đăng nhập lại.";
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+
+            return View(db.Orders.Find(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FinishOrders([Bind(Include = "OrderID")] Order order)
+        {
+            Order check = db.Orders.Find(order.OrderID);
+            if (check != null)
+            {
+                // update OnDelivering
+                string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableOrder + "] "
+                        + "SET " + Constants.DB_Order_OnDelivering + " = @Value1 "
+                        + ", " + Constants.DB_Order_Paid + " = @Value2 "
+                        + "WHERE " + Constants.DB_Order_ID + " = @ValueID";
+                int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
+                                                new SqlParameter("@Value1", false),
+                                                new SqlParameter("@Value2", true),
+                                                new SqlParameter("@ValueID", order.OrderID));
+
+                //if !Paid >> update Paid=true & add order_status Paid
+                if (!check.Paid)
+                {
+                    Order_Status checkStt = db.Order_Status.FirstOrDefault(s => s.OrderID.Contains(order.OrderID) && s.StatusID.Contains(Constants.Value_Status_Paid));
+                    if (checkStt == null)
+                    {
+                        string currentStationId = Session["StationID"] + "";
+
+                        Order_Status status = new Order_Status(order.OrderID, Constants.Value_Status_Paid, currentStationId, System.DateTime.Now);
+                        try
+                        {
+                            db.Order_Status.Add(status);
+                            db.SaveChanges();
+                        }
+                        catch
+                        {
+                            TempData["Error"] = "Chưa thể cập nhật lịch sử trạng thái \"Đã thanh toán\" của đơn hàng";
+                        }
+                    }
+                }
+
+                //add order_status Finished
+                Order_Status checkStt2 = db.Order_Status.FirstOrDefault(s => s.OrderID.Contains(order.OrderID) && s.StatusID.Contains(Constants.Value_Status_Finished));
+                if (checkStt2 == null)
+                {
+                    string currentStationId = Session["StationID"] + "";
+
+                    Order_Status status = new Order_Status(order.OrderID, Constants.Value_Status_Finished, currentStationId, System.DateTime.Now);
+                    try
+                    {
+                        db.Order_Status.Add(status);
+                        db.SaveChanges();
+                    }
+                    catch
+                    {
+                        TempData["Error"] = "Chưa thể cập nhật lịch sử trạng thái \"Đã giao hàng\" của đơn hàng";
+                    }
+                }
+            }
+
+            TempData["Success"] = "Đơn " + order.OrderID + " đã giao hàng.";
+            return RedirectToAction("FinishingOrders");
         }
 
         protected override void Dispose(bool disposing)

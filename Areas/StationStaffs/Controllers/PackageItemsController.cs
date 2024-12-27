@@ -70,7 +70,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                             + "SET " + Constants.DB_Package_NumOrder + " = @Value1 "
                             + ", " + Constants.DB_Package_Weight + " = @Value2 "
                             + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
-                        int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                        int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                             new SqlParameter("@Value1", newNum),
                                             new SqlParameter("@Value2", newWeight),
                                             new SqlParameter("@ValueID", packageId));
@@ -87,7 +87,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 + "SET " + Constants.DB_Package_Send + " = @Value1 "
                                 + ", " + Constants.DB_Package_Receive + " = @Value2 "
                                 + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
-                            rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                            rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                 new SqlParameter("@Value1", Constants.Value_Station_Default),
                                                 new SqlParameter("@Value2", Constants.Value_Station_Default),
                                                 new SqlParameter("@ValueID", packageId));

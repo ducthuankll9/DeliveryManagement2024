@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Danh sách chuyến xe của bạn";
-    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+    Layout = "~/Areas/Drivers/Views/Shared/_DriverLayout.cshtml";
 }
 
 <h2>Danh sách chuyến xe của bạn</h2>
@@ -23,21 +23,22 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.LinehaulID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VehicleNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumberOfOrder)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumberOfPackage)
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LinehaulID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfOrder)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfPackage)
+            </td>
+        </tr>
+    }
 
 </table>

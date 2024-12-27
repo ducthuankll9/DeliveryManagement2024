@@ -146,7 +146,7 @@ else
             </div>
         </div>
     </div>
-
+    <br />
 
 
     @Html.ValidationMessageFor(model => model.Creator, "", new { @class = "text-danger" })
@@ -166,7 +166,7 @@ else
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <br />
-                <div style="position: fixed; bottom: 10%; right:2%; z-index:1000;">
+                <div style="position: fixed; top: 10%; right:2%; z-index:1000;">
                     <input type="submit" value="Tiếp theo &#10148;" class="btn btn-outline-success inlineBl" />
                     @if (!Model.OnDelivering)
                     {

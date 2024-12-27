@@ -3,6 +3,10 @@
 @{
     ViewBag.Title = "Danh sách đơn";
     Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+    string SearchID = "", Phone = "", OnDelivering = "";
+    if(ViewBag.SearchID != null) { SearchID = ViewBag.SearchID; }
+    if(ViewBag.Phone != null) { Phone = ViewBag.Phone; }
+    if(ViewBag.OnDelivering != null) { OnDelivering = ViewBag.OnDelivering; } else { OnDelivering = "2"; }
 }
 
 <!-- Message to View -->
@@ -23,6 +27,50 @@
     </div>
 }
 
+<div class="row">
+    <div class="col-md-3">
+        @using (Html.BeginForm("Index", "OrdersManagement"))
+        {
+            <label for="IDlike">Lọc bằng mã đơn</label>
+            <div class="input-group">
+                <input class="form-control" type="text" id="IDlike" name="IDlike" value="@SearchID" placeholder="Mã đơn: 202411.." aria-label="Mã đơn: 202411.." aria-describedby="btnNavbarSearch">
+                <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><svg class="svg-inline--fa fa-search fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg><!-- <i class="fas fa-search"></i> Font Awesome fontawesome.com --></button>
+            </div>
+        }
+
+    </div>
+    <div class="col-md-3">
+        @using (Html.BeginForm("Index", "OrdersManagement"))
+        {
+            <label for="Phone">Lọc bằng SĐT</label>
+            <div class="input-group">
+                <input class="form-control" type="text" id="Phone" name="Phone" value="@Phone" placeholder="SĐT người gửi/nhận" aria-label="SĐT người gửi/nhận" aria-describedby="btnNavbarSearch">
+                <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><svg class="svg-inline--fa fa-search fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg><!-- <i class="fas fa-search"></i> Font Awesome fontawesome.com --></button>
+            </div>
+        }
+
+    </div>
+    <div class="col-md-6">
+        @using (Html.BeginForm("Index", "OrdersManagement"))
+        {
+            <label for="OnDelivering">Trạng thái vận chuyển</label>
+            <div class="input-group">
+                <div class="form-control borderW">
+                    <input type="radio" id="OnDeliveringTrue" name="OnDelivering" value="1" @(OnDelivering.Equals("1") ? "checked" : "") />
+                    <label for="OnDeliveringTrue">Đang vận chuyển</label>
+                    <input type="radio" id="OnDeliveringFalse" name="OnDelivering" value="0" @(OnDelivering.Equals("0") ? "checked" : "") style="margin-left:10%;" />
+                    <label for="OnDeliveringFalse">Đang khởi tạo/đã kết thúc</label>
+                    <input type="radio" id="OnDeliveringAll" name="OnDelivering" value="2" @(OnDelivering.Equals("2") ? "checked" : "") style="margin-left:10%;" />
+                    <label for="OnDeliveringAll">Tất cả</label>
+                </div>
+                <input type="submit" value="Lọc" class="btn btn-info" />
+            </div>
+        }
+
+    </div>
+</div>
+
+<br />
 <h2>Danh sách đơn</h2>
 
 <table class="table">

@@ -73,7 +73,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                         string sql = "INSERT INTO [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TablePackage + "] "
                             + "([PackageID] ,[CreateTime] ,[CompleteTime] ,[NumberOfOrder] ,[StatusID] ,[TotalWeight] ,[Packer] ,[SendingStation] ,[ReceivingStation]) "
                             + "VALUES ( @ValueID, @Value1, NULL, @Value2, @Value3, @Value4, @Value5, @Value6, @Value7 ) ";
-                        int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                        int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                             new SqlParameter("@ValueID", newID),            // PackageID
                                             new SqlParameter("@Value1", DateTime.Now),      // CreateTime
                                             new SqlParameter("@Value2", defInt),            // NumberOfOrder
@@ -195,7 +195,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 + ", " + Constants.DB_Package_Receive + " = @Value2 "
                                 + ", " + Constants.DB_Package_StatusID + " = @Value3 "
                                 + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
-                        int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                        int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                             new SqlParameter("@Value1", thisStation),
                                             new SqlParameter("@Value2", nextStation),
                                             new SqlParameter("@Value3", Constants.Value_Status_Packing),
@@ -216,12 +216,30 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 + "SET " + Constants.DB_Package_NumOrder + " = @Value1 "
                                 + ", " + Constants.DB_Package_Weight + " = @Value2 "
                                 + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
-                        int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                        int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                             new SqlParameter("@Value1", package.NumberOfOrder + 1),
                                             new SqlParameter("@Value2", package.TotalWeight + order.TotalWeight),
                                             new SqlParameter("@ValueID", package_order.PackageID));
 
                         TempData["Success"] = "Thành công!";
+
+                        // Add History
+                        string currentStationId = Session["StationID"].ToString();
+                        Order_Status checkStt = db.Order_Status.FirstOrDefault(s => s.OrderID.Contains(package_order.OrderID) && s.StationID.Contains(currentStationId) && s.StatusID.Contains(Constants.Value_Status_Packing));
+                        if (checkStt == null)
+                        {
+                            Order_Status status = new Order_Status(package_order.OrderID, Constants.Value_Status_Packing, currentStationId, System.DateTime.Now);
+                            try
+                            {
+                                db.Order_Status.Add(status);
+                                db.SaveChanges();
+                            }
+                            catch
+                            {
+                                TempData["Error"] = "Chưa thể cập nhật lịch sử trạng thái \"Đang đóng gói\" của đơn hàng";
+                            }
+                        }
+
                         return RedirectToAction("Packing", new { id = package_order.PackageID });
                     }
                     else
@@ -259,10 +277,40 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 + "SET " + Constants.DB_Package_StatusID + " = @Value1 "
                                 + " , " + Constants.DB_Package_CompleteTime + " = @Value2 "
                                 + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
-                int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                     new SqlParameter("@Value1", Constants.Value_Status_Packed),
                                     new SqlParameter("@Value2", DateTime.Now),
                                     new SqlParameter("@ValueID", package.PackageID));
+
+                // Add History
+                string currentStationId = Session["StationID"].ToString();
+                var listOrder = db.Package_Order.Where(po => po.PackageID.Contains(package.PackageID));
+                foreach(var order in listOrder )
+                {
+                    Order_Status checkStt = db.Order_Status.FirstOrDefault(s => s.OrderID.Contains(order.OrderID) && s.StationID.Contains(currentStationId) && s.StatusID.Contains(Constants.Value_Status_Packed));
+                    if (checkStt == null)
+                    {
+                        //Order_Status status = new Order_Status(order.OrderID, Constants.Value_Status_Packed, currentStationId, System.DateTime.Now);
+                        try
+                        {
+                            //db.Order_Status.Add(status);
+                            //db.SaveChanges();
+                            sql = "INSERT INTO [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableOrderStatus + "] "
+                                    + "([OrderID] ,[StatusID] ,[StationID] ,[Time]) "
+                                    + "VALUES ( @ValueID1, @ValueID2, @ValueID3, @Value1 ) ";
+                            rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
+                                                new SqlParameter("@ValueID1", order.OrderID),                   // OrderID
+                                                new SqlParameter("@ValueID2", Constants.Value_Status_Packed),   // StatusID
+                                                new SqlParameter("@ValueID3", currentStationId),                // StationID
+                                                new SqlParameter("@Value1", System.DateTime.Now)                // Time
+                                                );
+                        }
+                        catch
+                        {
+                            TempData["Error"] = "Chưa thể cập nhật lịch sử trạng thái \"Đã đóng gói\" của đơn hàng";
+                        }
+                    }
+                }
             }
             catch
             {
@@ -289,7 +337,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 + "SET " + Constants.DB_Package_StatusID + " = @Value1 "
                                 + " , " + Constants.DB_Package_CompleteTime + " = NULL "
                                 + "WHERE " + Constants.DB_Package_ID + " = @ValueID";
-                int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                     new SqlParameter("@Value1", Constants.Value_Status_Packing),
                                     new SqlParameter("@ValueID", package.PackageID));
             }

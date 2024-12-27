@@ -59,7 +59,7 @@ namespace DeliveryManagement.Controllers
                         }
                         else if(station.IsStation)
                         {
-                            return RedirectToAction("Index", "OrdersManagement", new { area = "Orders" });
+                            return RedirectToAction("Index", "OrdersManagement", new { area = "Orders", OnDelivering = "2" });
                         }
                         else
                         {

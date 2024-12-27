@@ -12,7 +12,6 @@
     <div class="col-lg-6">
         <div style="float:right;">
             @Html.ActionLink("Chỉnh sửa", "Edit", new { id = Model.OrderID.Trim() }, new { @class = "btn btn-outline-success" })
-            @Html.ActionLink("Xóa", "Delete", new { id = Model.OrderID.Trim() }, new { @class = "btn btn-outline-danger" })
             @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-outline-info" })
         </div>
     </div>
@@ -81,7 +80,7 @@
                     </tr>
                     <tr>
                         <td>Lộ trình</td>
-                        <th>@Html.DisplayFor(model => model.Station1.StationName) @(string.IsNullOrWhiteSpace(Model.Transit) ? " &#8594; " + Html.DisplayFor(model => model.Station3.StationName) : "" ) &#8594; @Html.DisplayFor(model => model.Station2.StationName)</th>
+                        <th>@Html.DisplayFor(model => model.Station1.StationName) &#8594; @(!string.IsNullOrWhiteSpace(Model.Transit) ? Model.Station3.StationName : "" ) &#8594; @Html.DisplayFor(model => model.Station2.StationName)</th>
                     </tr>
                     <tr>
                         <td>@Html.DisplayNameFor(model => model.CurrentStationID)</td>

@@ -26,7 +26,7 @@
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="#">
-            Trạm giao nhận
+            Tài xế
             <br />@Session["StationName"]
         </a>
         <!-- Sidebar Toggle-->
@@ -44,9 +44,9 @@
                     {
                         <li><a class="dropdown-item" href="@Url.Action("Index", "Staffs", new { area = "Admin" })">ADMIN</a></li>
                     }
-                    @if ((bool)Session["IsDriver"])
+                    @if ((bool)Session["IsStation"])
                     {
-                        <li><a class="dropdown-item" href="@Url.Action("Index", "Linehauls", new { area = "Drivers" })">Drives</a></li>
+                        <li><a class="dropdown-item" href="@Url.Action("Index", "OrdersManagement", new { area = "Orders", OnDelivering = "2" })">StationStaffs</a></li>
                     }
                     <li><hr class="dropdown-divider" /></li>
                     <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Home", new { area = "" })">Đổi mật khẩu</a></li>
@@ -62,61 +62,28 @@
                 <!-- main menu left -->
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Chức năng giao nhận</div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDH" aria-expanded="false" aria-controls="collapseDH">
-                            <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
-                            Đơn hàng
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse @(ViewContext.RouteData.DataTokens["area"].ToString() == "Orders" ? "show" : "")" id="collapseDH" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "OrderRegistration" && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
-                                   href="@Url.Action("Create", "OrdersManagement", new { area = "Orders" })">
-                                    Tạo đơn
-                                </a>
-                                <a class="nav-link @((ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "Details") && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
-                                   href="@Url.Action("Index", "OrdersManagement", new { area = "Orders", OnDelivering = "2" })">
-                                    Danh sách đơn
-                                </a>
-                                <a class="nav-link @((ViewContext.RouteData.Values["Action"].ToString() == "PrintOrder" || ViewContext.RouteData.Values["Action"].ToString() == "PreviewOrder") && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
-                                   href="@Url.Action("PrintOrder", "OrdersManagement", new { area = "Orders" })">
-                                    In đơn
-                                </a>
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "OrderProblems" ? "active" : "")" 
-                                   href="#">
-                                    Sự cố đơn hàng
-                                </a>
-                            </nav>
-                        </div>
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseXN" aria-expanded="false" aria-controls="collapseXN">
-                            <div class="sb-nav-link-icon"><i class="fas fa-boxes"></i></div>
-                            Xuất nhập
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse @(ViewContext.RouteData.DataTokens["area"].ToString() == "StationStaffs" ? "show" : "")" id="collapseXN" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ReceivingOrder" && ViewContext.RouteData.Values["Controller"].ToString() == "OrderProcessing" ? "active" : "")" 
-                                   href="@Url.Action("ReceivingOrder", "OrderProcessing", new { area = "StationStaffs" })">
-                                    Nhận đơn lẻ
-                                </a>
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ReceivePackage" && ViewContext.RouteData.Values["Controller"].ToString() == "Packages" ? "active" : "")" 
-                                   href="#">
-                                    Nhận gói hàng
-                                </a>
-                                <a class="nav-link @((ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString() == "Packing") && ViewContext.RouteData.Values["Controller"].ToString() == "Packages" ? "active" : "")" 
-                                   href="@Url.Action("Index", "Packages", new { area = "StationStaffs" })">
-                                    Gói hàng
-                                </a>
-                                <a class="nav-link @((ViewContext.RouteData.Values["Action"].ToString() == "Index" || ViewContext.RouteData.Values["Action"].ToString().Contains("Linehaul")) && ViewContext.RouteData.Values["Controller"].ToString() == "Linehauls" ? "active" : "")" 
-                                   href="@Url.Action("Index", "Linehauls", new { area = "StationStaffs" })">
-                                    Chuyến xe
-                                </a>
-                            </nav>
-                        </div>
-
                         <div class="sb-sidenav-menu-heading">Chức năng tài xế</div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCX" aria-expanded="false" aria-controls="collapseCX">
+                            <div class="sb-nav-link-icon"><i class="fas fa-truck"></i></div>
+                            Chuyến xe
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse @(ViewContext.RouteData.DataTokens["area"].ToString() == "Drivers" ? "show" : "")" id="collapseCX" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Linehauls" ? "active" : "")"
+                                   href="@Url.Action("Index", "Linehauls", new { area = "Drivers" })">
+                                    Chuyến xe của bạn
+                                </a>
+                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "ReceiveLinehaul" && ViewContext.RouteData.Values["Controller"].ToString() == "Linehauls" ? "active" : "")"
+                                   href="@Url.Action("ReceiveLinehaul", "Linehauls", new { area = "Drivers" })">
+                                    Nhận chuyến
+                                </a>
+                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "FinishLinehaul" && ViewContext.RouteData.Values["Controller"].ToString() == "Linehauls" ? "active" : "")"
+                                   href="#">
+                                    Đến nơi
+                                </a>
+                            </nav>
+                        </div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTXDH" aria-expanded="false" aria-controls="collapseTXDH">
                             <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                             Đơn hàng
@@ -124,11 +91,11 @@
                         </a>
                         <div class="collapse @(ViewContext.RouteData.DataTokens["area"].ToString() == "Orders" ? "show" : "")" id="collapseTXDH" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString().Contains("Finish") && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
+                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString().Contains("Finish") && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")"
                                    href="@Url.Action("FinishingOrders", "OrdersManagement", new { area = "Orders" })">
                                     Giao đơn
                                 </a>
-                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "UpdateCanceled" && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")" 
+                                <a class="nav-link @(ViewContext.RouteData.Values["Action"].ToString() == "UpdateCanceled" && ViewContext.RouteData.Values["Controller"].ToString() == "OrdersManagement" ? "active" : "")"
                                    href="#">
                                     Hủy đơn
                                 </a>

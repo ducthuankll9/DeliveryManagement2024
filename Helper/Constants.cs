@@ -74,6 +74,7 @@ namespace DeliveryManagement.Helper
             public const string Value_Status_Transited = "Transited";
             public const string Value_Status_Sending = "Sending";
             public const string Value_Status_Finished = "Finished";
+            public const string Value_Status_Paid = "Paid";
             public const string Value_Status_Breaked = "Breaked";
             public const string Value_Status_Cancelled = "Cancelled";
 

@@ -23,7 +23,7 @@ namespace DeliveryManagement.Areas.Admin.Controllers
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
 
-            var staffs = db.Staffs.Include(s => s.Station).Where(s => string.IsNullOrEmpty(s.StaffID.Trim()) );
+            var staffs = db.Staffs.Include(s => s.Station).Where(s => !string.IsNullOrEmpty(s.StaffID.Trim()) );
             return View(staffs.ToList());
         }
 

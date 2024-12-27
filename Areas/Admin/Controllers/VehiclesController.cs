@@ -24,7 +24,9 @@ namespace DeliveryManagement.Areas.Admin.Controllers
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
 
-            return View(db.Vehicles.ToList());
+            var listVehicles = db.Vehicles.Where(v => !string.IsNullOrEmpty(v.VehicleNumber.Trim()));
+
+            return View(listVehicles);
         }
 
         // GET: Admin/Vehicles/Create

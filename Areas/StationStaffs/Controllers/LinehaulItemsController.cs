@@ -73,7 +73,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaul + "] "
                                 + "SET " + Constants.DB_Linehaul_NumberOfPackage + " = @Value1 "
                                 + "WHERE " + Constants.DB_Linehaul_ID + " = @ValueID";
-                                int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                     new SqlParameter("@Value1", newNum),
                                                     new SqlParameter("@ValueID", linehaulId));
 
@@ -83,7 +83,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 sql = "DELETE FROM [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaulPackage + "] "
                                     + "WHERE " + Constants.DB_Linehaul_ID + " = @ValueID1 "
                                     + "AND " + Constants.DB_Package_ID + " = @ValueID2";
-                                rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                     new SqlParameter("@ValueID1", linehaulId),
                                                     new SqlParameter("@ValueID2", itemId));
                             }
@@ -106,7 +106,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaul + "] "
                                 + "SET " + Constants.DB_Linehaul_NumberOfOrder + " = @Value1 "
                                 + "WHERE " + Constants.DB_Linehaul_ID + " = @ValueID";
-                                int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                     new SqlParameter("@Value1", newNum),
                                                     new SqlParameter("@ValueID", linehaulId));
 
@@ -116,7 +116,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                 sql = "DELETE FROM [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaulOrder + "] "
                                     + "WHERE " + Constants.DB_Linehaul_ID + " = @ValueID1 "
                                     + "AND " + Constants.DB_Order_ID + " = @ValueID2";
-                                rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                     new SqlParameter("@ValueID1", linehaulId),
                                                     new SqlParameter("@ValueID2", itemId));
                             }

@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Giao hàng";
+    Layout = "~/Areas/StationStaffs/Views/Shared/_CommonLayout.cshtml";
+}
+
+<!-- Message to View -->
+@if (ViewBag.Error != null || TempData["Error"] != null)
+{
+    <div class="form-group alert alert-danger alert-dismissible fade show alertFront" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        @ViewBag.Error @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="form-group alert alert-success alert-dismissible fade show alertFront" role="alert">
+        <i class="far fa-check-circle"></i>
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h2>Giao hàng</h2>
+
+@using (Html.BeginForm("FinishingOrders", "OrdersManagement", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row form-group">
+        <div class="col-lg-8">
+            <input type="text" id="OrderID" name="OrderID" autofocus placeholder="Mã đơn hàng..." class="col-lg-12 form-control" />
+        </div>
+        <div class="col-lg-4">
+            <input type="submit" value="Tìm kiếm" class="btn btn-outline-success col-lg-6" />
+        </div>
+    </div>
+}
+

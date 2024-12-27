@@ -58,14 +58,15 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                 {
                     try
                     {
+                        int num = 0;
                         string sql = "INSERT INTO [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaul + "] "
                             + "([LinehaulID] ,[VehicleNumber] ,[NumberOfPackage] ,[NumberOfOrder] ,[Seal] ,[Operator] ,[Driver]) "
                             + "VALUES ( @ValueID, @Value1, @Value2, @Value3, @Value4, @Value5, @Value6 ) ";
-                        int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                        int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                             new SqlParameter("@ValueID", newID),            // LinehaulID
                                             new SqlParameter("@Value1", " "),               // VehicleNumber
-                                            new SqlParameter("@Value2", 0),                 // NumberOfPackage
-                                            new SqlParameter("@Value3", 0),                 // NumberOfOrder
+                                            new SqlParameter("@Value2", num),                 // NumberOfPackage
+                                            new SqlParameter("@Value3", num),                 // NumberOfOrder
                                             new SqlParameter("@Value4", " "),               // Seal
                                             new SqlParameter("@Value5", userID),            // Operator
                                             new SqlParameter("@Value6", Constants.Value_Staff_Default)   // Driver
@@ -149,7 +150,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                     string sql = "INSERT INTO [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaulPackage + "] "
                                             + "([LinehaulID] ,[PackageID] ,[AddTime]) "
                                             + "VALUES ( @ValueID1, @ValueID2, @Value1 ) ";
-                                    int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                    int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                         new SqlParameter("@ValueID1", l_package.LinehaulID),        // LinehaulID
                                                         new SqlParameter("@ValueID2", l_package.PackageID),         // PackageID
                                                         new SqlParameter("@Value1", DateTime.Now));                 // AddTime
@@ -158,7 +159,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                     sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaul + "] "
                                             + "SET " + Constants.DB_Linehaul_NumberOfPackage + " = @Value1 "
                                             + "WHERE " + Constants.DB_Linehaul_ID + " = @ValueID";
-                                    rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                    rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                         new SqlParameter("@Value1", linehaul.NumberOfPackage + 1),
                                                         new SqlParameter("@ValueID", l_package.LinehaulID));
 
@@ -207,7 +208,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                     string sql = "INSERT INTO [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaulOrder + "] "
                                             + "([LinehaulID] ,[OrderID] ,[AddTime]) "
                                             + "VALUES ( @ValueID1, @ValueID2, @Value1 ) ";
-                                    int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                    int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                         new SqlParameter("@ValueID1", l_order.LinehaulID),      // LinehaulID
                                                         new SqlParameter("@ValueID2", l_order.OrderID),         // OrderID
                                                         new SqlParameter("@Value1", DateTime.Now));             // AddTime
@@ -216,7 +217,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                     sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaul + "] "
                                             + "SET " + Constants.DB_Linehaul_NumberOfOrder + " = @Value1 "
                                             + "WHERE " + Constants.DB_Linehaul_ID + " = @ValueID";
-                                    rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                                    rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                         new SqlParameter("@Value1", linehaul.NumberOfOrder + 1),
                                                         new SqlParameter("@ValueID", l_package.LinehaulID));
 
@@ -312,7 +313,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                                             + "SET " + Constants.DB_Linehaul_VehicleNumber + " = @Value1 "
                                             + ", " + Constants.DB_Linehaul_Seal + " = @Value2 "
                                             + "WHERE " + Constants.DB_Linehaul_ID + " = @ValueID";
-                        int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                        int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                             new SqlParameter("@Value1", linehaul.VehicleNumber),
                                             new SqlParameter("@Value2", linehaul.Seal),
                                             new SqlParameter("@ValueID", linehaul.LinehaulID));
@@ -347,7 +348,7 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                     string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableLinehaul + "] "
                                         + "SET " + Constants.DB_Linehaul_Seal + " = @Value1 "
                                         + "WHERE " + Constants.DB_Linehaul_ID + " = @ValueID";
-                    int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                    int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                         new SqlParameter("@Value1", " "),
                                         new SqlParameter("@ValueID", LinehaulID));
                 }

@@ -24,7 +24,9 @@ namespace DeliveryManagement.Areas.Admin.Controllers
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
 
-            return View(db.Stations.ToList());
+            var listStations = db.Stations.Where(s => !string.IsNullOrEmpty(s.StationID.Trim()));
+
+            return View(listStations);
         }
 
         // GET: Admin/Stations/Details/5

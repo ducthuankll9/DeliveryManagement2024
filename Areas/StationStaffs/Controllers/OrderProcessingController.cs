@@ -50,11 +50,27 @@ namespace DeliveryManagement.Areas.StationStaffs.Controllers
                         string sql = "UPDATE [" + Constants.DB_DBNAME + "].[dbo].[" + Constants.DB_TableOrder + "] "
                         + "SET " + Constants.DB_Order_CurrentStation + " = @Value1 "
                         + "WHERE " + Constants.DB_Order_ID + " = @ValueID";
-                        int rowsAffected = db.Database.ExecuteSqlCommand(sql,
+                        int rowsAffected = db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, sql,
                                                         new SqlParameter("@Value1", currentStation),
                                                         new SqlParameter("@ValueID", id));
 
                         TempData["Success"] = "Thành công! đơn " + id + " đã được nhận";
+
+                        // Add History
+                        Order_Status checkStt = db.Order_Status.FirstOrDefault(s => s.OrderID.Contains(order.OrderID) && s.StationID.Contains(currentStation) && s.StatusID.Contains(Constants.Value_Status_Received));
+                        if (checkStt == null)
+                        {
+                            Order_Status status = new Order_Status(order.OrderID, Constants.Value_Status_Received, currentStation, System.DateTime.Now);
+                            try
+                            {
+                                db.Order_Status.Add(status);
+                                db.SaveChanges();
+                            }
+                            catch
+                            {
+                                TempData["Error"] = "Chưa thể cập nhật lịch sử trạng thái \"Đã nhận đơn\" của đơn hàng";
+                            }
+                        }
                     }
                     else
                     {
